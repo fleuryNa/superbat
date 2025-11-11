@@ -13,7 +13,22 @@
                             <span class="nav-label">Dashboard</span>
                         </a>
                     </li>
-                    <li class="heading">FEATURES</li>
+                    <li class="heading">MODULES</li>
+
+                     <li>
+                        <a href="javascript:;">
+                            <i class="sidebar-item-icon fa fa-users"></i>
+                            <span class="nav-label">Administration</span><i class="fa fa-angle-left arrow"></i></a>
+                        <ul class="nav-2-level collapse">
+                            <li>
+                                <a href="<?= base_url()?>/administration/Profil_Droit">Accès</a>
+                            </li>
+                            <li>
+                               <a href="<?= base_url()?>/administration/User">Utilisateurs</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
                     <li>
                         <a href="javascript:;"><i class="sidebar-item-icon fa fa-bookmark"></i>
                             <span class="nav-label">Basic UI</span><i class="fa fa-angle-left arrow"></i></a>

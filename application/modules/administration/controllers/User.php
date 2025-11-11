@@ -1,0 +1,397 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class User extends MY_Controller {
+
+	
+	public function index()
+	{
+		$data['title']="Liste de Utilisateurs";
+		$this->load->view('User_List_View',$data);
+	}
+
+
+	public function listing()
+	{
+
+		$query_principal ="SELECT ID_USER, NOM, PRENOM, USERNAME, config_profil.DESCRIPTION as DESCRIPTION, masque_agence_msi.DESCRIPTION AS AGENCE, admin_user.STATUS AS STATUS FROM `admin_user` JOIN config_profil ON config_profil.PROFIL_ID = admin_user.PROFIL_ID JOIN masque_agence_msi ON masque_agence_msi.ID_AGENCE = admin_user.ID_AGENCE" ;
+
+		$var_search = !empty($_POST['search']['value']) ? $this->db->escape_like_str($_POST['search']['value']) : null;
+
+		$limit = 'LIMIT 0,10';
+
+		if (isset($_POST['length']) && $_POST['length'] != -1) {
+			$limit = 'LIMIT ' . (isset($_POST["start"]) ? $_POST["start"] : 0) . ',' . $_POST["length"];
+		}
+
+		$order_by = '';
+
+		$order_column = array('ID_USER', 'NOM','PRENOM', 'USERNAME','config_profil.DESCRIPTION', 'masque_agence_msi.DESCRIPTION', 'admin_user.STATUS');
+
+		$order_by = isset($_POST['order']) ? ' ORDER BY ' . $order_column[$_POST['order']['0']['column']] . '  ' . $_POST['order']['0']['dir'] : ' ORDER BY ID_USER ASC';
+
+		$search = !empty($_POST['search']['value']) ?
+		"AND NOM LIKE '%$var_search%' OR PRENOM LIKE '%$var_search%' OR USERNAME LIKE '%$var_search%' OR config_profil.DESCRIPTION LIKE '%$var_search%' OR masque_agence_msi.DESCRIPTION LIKE '%$var_search%' "
+		: '';
+
+		$critaire = '';
+
+		$query_secondaire = $query_principal . ' ' . $critaire . ' ' . $search . ' ' . $order_by . '   ' . $limit;
+		$query_filter = $query_principal . ' ' . $critaire . ' ' . $search;
+
+		$resultat = $this->Model->datatable($query_secondaire);
+
+		$data = array();
+		foreach ($resultat as $key) {
+			$row = array();
+
+
+			if ($key->STATUS == 1) {
+				$stat = 'Actif';
+				$fx = 'desactiver';
+				$col = 'btn-danger';
+				$titr = 'Désactiver';
+				$stitr = 'voulez-vous désactiver cet utilisateur ';
+				$bigtitr = 'Désactivation de cet utilisateur';
+				$icone= '<i class="fa fa-lock"></i>';
+			}
+			else{
+				$stat = 'Innactif';
+				$fx = 'reactiver';
+				$col = 'btn-primary';
+				$titr = 'Réactiver';
+				$stitr = 'voulez-vous réactiver cet  utilisateur';
+				$bigtitr = 'Réactivation de cet  utilisateur';
+				$icone= '<i class="fa fa-unlock"></i>';
+			}
+
+			$row[] = $key->NOM." ".$key->PRENOM;
+			$row[] = $key->USERNAME;
+			$row[] = $key->AGENCE;
+			$row[] = $key->DESCRIPTION;
+			$row[] = $stat;
+
+			$row[] = '
+			<div class="modal fade" id="desactcat'.$key->ID_USER.'" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+			<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+			<div class="modal-header">
+			<h4 class="modal-title" id="myModalLabel">'.$bigtitr.'</h4>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+			</div>
+			<div class="modal-body">
+			<h6><b>Mr/Mme , </b> '.$stitr.' ('.$key->NOM.' '.$key->PRENOM.')?</h6>
+			</div>
+			<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+			<a href="'.base_url("administration/User/".$fx."/".$key->ID_USER).'" class="btn '.$col.'">'.$titr.'</a>
+			</div>
+			</div>
+			</div>
+			</div>
+
+			<div class="btn-group">
+			<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+			<i class="fa fa-cogs"></i> Actions <i class="fa fa-angle-down"></i>
+			</button>
+			<div class="dropdown-menu">
+			<a class="dropdown-item" href="'.base_url("administration/User/index_update/".$key->ID_USER).'">
+			<i class="fa fa-edit"></i> Modifier
+			</a>
+			<a class="dropdown-item" href="#" data-toggle="modal" data-target="#desactcat'.$key->ID_USER.'">'.$icone.' '.$titr.' </a> 
+			</div>
+			</div>';
+
+
+			
+			$data[] = $row;
+		}
+
+		$output = array(
+			"draw" => intval($_POST['draw']),
+			"recordsTotal" => $this->Model->all_data($query_principal),
+			"recordsFiltered" => $this->Model->filtrer($query_filter),
+			"data" => $data
+		);
+
+		echo json_encode($output);
+		exit;
+	}
+
+
+
+	public function ajouter()
+	{
+		$data['title']='Utilisateur';
+
+		$data['profil']=$this->Model->getRequete('SELECT * FROM `config_profil` order by DESCRIPTION');
+
+		$data['agence']=$this->Model->getRequete('SELECT * FROM `masque_agence_msi` order by DESCRIPTION');
+
+		$this->load->view('User_Add_View',$data);
+
+	}
+
+
+
+
+
+
+
+	public function add()
+	{
+		$NOM=$this->input->post('NOM');
+
+		$PRENOM=$this->input->post('PRENOM');
+
+		$USERNAME=$this->input->post('USERNAME');
+
+		$PASSWORD=$this->input->post('PASSWORD');
+
+		$PROFIL_ID=$this->input->post('PROFIL_ID');
+
+		$ID_AGENCE=$this->input->post('ID_AGENCE');
+
+
+		$this->form_validation->set_rules('NOM', 'Noms', 'required');
+
+		$this->form_validation->set_rules('PRENOM', 'Prenom', 'required');
+
+		$this->form_validation->set_rules('USERNAME', 'Username', 'required|callback_check_username_unique');
+
+		$this->form_validation->set_rules('PASSWORD', 'Mot de passe', 'required');
+
+		$this->form_validation->set_rules('PROFIL_ID', 'Profil', 'required');
+
+		$this->form_validation->set_rules('ID_AGENCE', 'Agence', 'required');
+
+
+
+		if ($this->form_validation->run() == FALSE){
+
+			$message = "<div class='alert alert-danger'>
+
+			Utilisateur non enregistr&eacute; de cong&eacute; non enregistr&eacute;
+
+			<button type='button' class='close' data-dismiss='alert'>&times;</button>
+
+			</div>";
+
+			$this->session->set_flashdata(array('message'=>$message));
+
+			$data['title']='Utilisateur';
+
+			$data['profil']=$this->Model->getRequete('SELECT * FROM `config_profil` order by DESCRIPTION');
+
+			$data['agence']=$this->Model->getRequete('SELECT * FROM `masque_agence_msi` order by DESCRIPTION');
+
+			$this->load->view('User_Add_View',$data);
+
+		}else{
+
+			$datasuser=array(
+
+				'NOM'=>$NOM,
+
+				'PRENOM'=>$PRENOM,
+
+				'USERNAME'=>$USERNAME,
+
+				'PASSWORD'=>md5($PASSWORD),
+
+				'PROFIL_ID'=>$PROFIL_ID,
+
+				'ID_AGENCE'=>$ID_AGENCE,
+
+			);
+
+			$this->Model->insert_last_id('admin_user',$datasuser);  
+
+			$message = "<div class='alert alert-success' id='message'>
+
+			Utilisateur enregistr&eacute; avec succés
+
+			<button type='button' class='close' data-dismiss='alert'>&times;</button>
+
+			</div>";
+
+			$this->session->set_flashdata(array('message'=>$message));
+
+			redirect(base_url('administration/User'));  
+
+		}
+
+	}
+
+public function check_username_unique()
+{
+	$username=$this->input->post('USERNAME');
+    $exists = $this->db
+        ->where('USERNAME', $username)
+        ->get('admin_user')
+        ->num_rows();
+
+    if ($exists > 0) {
+        $this->form_validation->set_message('check_username_unique', 'Ce nom d’utilisateur existe déjà.');
+        return false;
+    }
+    return true;
+}
+
+
+    public function index_update($id)
+    {
+     $data['title']='Utilisateur';
+
+      $data['data']=$this->Model->getRequeteOne('SELECT * FROM `admin_user` WHERE ID_USER = '.$id.'');
+
+      $data['profil']=$this->Model->getRequete('SELECT * FROM `config_profil` order by DESCRIPTION');
+
+      $data['agence']=$this->Model->getRequete('SELECT * FROM `masque_agence_msi` order by DESCRIPTION');
+
+      $this->load->view('User_Update_View',$data);
+
+    }
+
+    public function update()
+    {
+      $NOM=$this->input->post('NOM');
+
+      $PRENOM=$this->input->post('PRENOM');
+
+      $USERNAME=$this->input->post('USERNAME');
+
+      $ID_USER=$this->input->post('ID_USER');
+
+      $PROFIL_ID=$this->input->post('PROFIL_ID');
+
+      $ID_AGENCE=$this->input->post('ID_AGENCE');
+
+    
+
+      $this->form_validation->set_rules('NOM', 'Nom', 'required');
+
+      $this->form_validation->set_rules('PRENOM', 'Prenom', 'required');
+
+      $this->form_validation->set_rules('USERNAME', 'Username', 'required');
+
+      $this->form_validation->set_rules('PROFIL_ID', 'Profile', 'required');
+
+      $this->form_validation->set_rules('ID_AGENCE', 'Agence', 'required');
+
+    
+
+       if ($this->form_validation->run() == FALSE){
+
+        $message = "<div class='alert alert-danger'>
+
+                                Utilisateur non modifi&eacute; de cong&eacute; non enregistr&eacute;
+
+                                <button type='button' class='close' data-dismiss='alert'>&times;</button>
+
+                          </div>";
+
+        $this->session->set_flashdata(array('message'=>$message));
+
+        $data['title']='Utilisateur';
+
+        $data['data']=$this->Model->getRequeteOne('SELECT * FROM `admin_user` WHERE ID_USER = '.$ID_USER.'');
+
+        $data['profil']=$this->Model->getRequete('SELECT * FROM `config_profil` order by DESCRIPTION');
+
+        $this->load->view('User_Update_View',$data);
+
+       }
+
+       else{
+
+    
+
+        $datasuser=array(
+
+                           'NOM'=>$NOM,
+
+                           'PRENOM'=>$PRENOM,
+
+                           'USERNAME'=>$USERNAME,
+
+                           'PROFIL_ID'=>$PROFIL_ID,
+
+                           'ID_AGENCE'=>$ID_AGENCE
+
+                          );
+
+                          
+
+        $this->Model->update('admin_user',array('ID_USER'=>$ID_USER),$datasuser);  
+
+    
+
+        $message = "<div class='alert alert-success' id='message'>
+
+                                Utilisateur modifi&eacute; avec succés
+
+                                <button type='button' class='close' data-dismiss='alert'>&times;</button>
+
+                          </div>";
+
+        $this->session->set_flashdata(array('message'=>$message));
+
+          redirect(base_url('administration/User'));  
+
+       }
+
+    }
+
+
+
+
+
+    public function desactiver($id)
+    {
+
+      $this->Model->update('admin_user',array('ID_USER'=>$id),array('STATUS'=>0));
+
+      $message = "<div class='alert alert-success' id='message'>
+
+                            Utilisateur désactivé avec succés
+
+                            <button type='button' class='close' data-dismiss='alert'>&times;</button>
+
+                      </div>";
+
+      $this->session->set_flashdata(array('message'=>$message));
+
+      redirect(base_url('administration/User'));  
+
+    }
+
+
+
+  public function reactiver($id)
+    {
+
+      $this->Model->update('admin_user',array('ID_USER'=>$id),array('STATUS'=>1));
+
+      $message = "<div class='alert alert-success' id='message'>
+
+                            Utilisateur Réactivé avec succés
+
+                            <button type='button' class='close' data-dismiss='alert'>&times;</button>
+
+                      </div>";
+
+      $this->session->set_flashdata(array('message'=>$message));
+
+      redirect(base_url('administration/User'));  
+
+    }
+
+
+
+
+
+
+}
