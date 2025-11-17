@@ -1,0 +1,49 @@
+# Fichiers de configuration
+/config/
+/config/*
+*.env
+.env.local
+.env.production
+config.php
+database.php
+application/config/
+application/config/*.php
+
+# Base de données
+*.sql
+*.db
+*.sqlite
+*.mdb
+database/
+*.bak
+
+# Fichiers XAMPP
+/xampp/
+/htdocs/phpmyadmin/
+
+# Logs
+*.log
+logs/
+application/logs/*
+
+# Cache
+cache/
+application/cache/*
+*.tmp
+*.temp
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Uploads (si applicable)
+uploads/
+assets/uploads/
