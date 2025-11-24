@@ -1,12 +1,24 @@
+  <style>
+      
+      .brand-img {
+    height: 50px;
+}
+
+.brand-img-mini {
+    height: 30px;
+    display: none; /* s'affiche seulement en mode mini si tu veux */
+}
+
+  </style>
+
+
   <header class="header">
-            <div class="page-brand">
-                <a class="link" href="index.html">
-                    <span class="brand">Admin
-                        <span class="brand-tip">CAST</span>
-                    </span>
-                    <span class="brand-mini">AC</span>
-                </a>
-            </div>
+<div class="page-brand">
+    <a class="link" href="index.html" style="width:100%; display:block;">
+        <img src="<?= base_url()?>assets/img/logos/supertbat.png" alt="Logo" class="brand-img" style="width:100%; height:auto;">
+    </a>
+</div>
+
             <div class="flexbox flex-1">
                 <!-- START TOP-LEFT TOOLBAR-->
                 <ul class="nav navbar-toolbar">
@@ -140,10 +152,9 @@
                     <li class="dropdown dropdown-user">
                         <a class="nav-link dropdown-toggle link" data-toggle="dropdown">
                             <img src="<?= base_url()?>/assets/img/admin-avatar.png" />
-                            <span></span>Admin<i class="fa fa-angle-down m-l-5"></i></a>
+                            <span></span><?=$this->session->userdata('SUPERBAT_NOM')?><i class="fa fa-angle-down m-l-5"></i></a>
                         <ul class="dropdown-menu dropdown-menu-right">
-                            <!-- <a class="dropdown-item" href="profile.html"><i class="fa fa-user"></i>Profile</a>
-                            <a class="dropdown-item" href="profile.html"><i class="fa fa-cog"></i>Settings</a> -->
+                         
                             <a class="dropdown-item" href="<?= base_url()?>/Login/forgotPassword"><i class="fa fa-support"></i>Changer mot de passe</a>
                             <li class="dropdown-divider"></li>
                             <a class="dropdown-item" href="<?= base_url()?>/Login/do_logout"><i class="fa fa-power-off"></i>Logout</a>

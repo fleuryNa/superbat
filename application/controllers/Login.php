@@ -6,7 +6,7 @@ class Login extends MX_Controller {
 
 	public function index()
 	{
-		 if (!empty($this->session->userdata('SOCAR_ID_USER'))) {
+		 if (!empty($this->session->userdata('SUPERBAT_ID_USER'))) {
         $message='<div class="alert alert-success text-center" id="message">Connexion bien etablie!<br> Les menus sont à gauche</div>';
         $this->session->set_flashdata($datas);     
         $this->session->set_flashdata(array('message'=>$message));    
@@ -52,13 +52,13 @@ class Login extends MX_Controller {
            
 
               $session = array(
-                              'SOCAR_ID_USER' => $user['ID_USER'],
-                              'SOCAR_NOM' => $user['NOM'],
-                              'SOCAR_PRENOM' => $user['PRENOM'],
-                              'SOCAR_USERNAME' => $user['USERNAME'],
-                              'SOCAR_PROFIL_ID' => $user['PROFIL_ID'],
+                              'SUPERBAT_ID_USER' => $user['ID_USER'],
+                              'SUPERBAT_NOM' => $user['NOM'],
+                              'SUPERBAT_PRENOM' => $user['PRENOM'],
+                              'SUPERBAT_USERNAME' => $user['USERNAME'],
+                              'SUPERBAT_PROFIL_ID' => $user['PROFIL_ID'],
                               'ID_EMPLOYE' => $user['ID_EMPLOYE'],
-                              'SOCAR_DROIT'=>$listdroi,
+                              'SUPERBAT_DROIT'=>$listdroi,
                                );
                 
                  $message = "<div class='alert alert-success' id='messages'> Bonne Connexion</div>";
@@ -84,10 +84,10 @@ class Login extends MX_Controller {
     public function do_logout(){
 
                 $session = array(
-                              'SOCAR_ID_USER' => NULL,
-                              'SOCAR_NOM' => NULL,
-                              'SOCAR_PRENOM' => NULL,
-                              'SOCAR_USERNAME' => NULL,
+                              'SUPERBAT_ID_USER' => NULL,
+                              'SUPERBAT_NOM' => NULL,
+                              'SUPERBAT_PRENOM' => NULL,
+                              'SUPERBAT_USERNAME' => NULL,
                             );                   
             $this->session->set_userdata($session);
             redirect(base_url('Login'));

@@ -11,7 +11,7 @@ class Acceuil extends MX_Controller {
 
     public function Is_Connected()
        {
-       if (empty($this->session->userdata('SOCAR_ID_USER')))
+       if (empty($this->session->userdata('SUPERBAT_ID_USER')))
         {
          redirect(base_url('Login/'));
         }

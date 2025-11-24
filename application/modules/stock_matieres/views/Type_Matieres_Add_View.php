@@ -32,35 +32,22 @@
         <div class="ibox">
 
           <?php 
-          include 'includes/menu_founisseur.php';
+          include 'includes/menu_type_matieres.php';
           ?>
           <div class="ibox-body">
-            <form id="FormData" action="<?php echo base_url()?>stock_matieres/Fournisseur/update" method="POST" enctype="multipart/form-data">
+            <form id="FormData" action="<?php echo base_url()?>stock_matieres/Type_matieres/add" method="POST" enctype="multipart/form-data">
               <div class="row">
-                 <input class="form-control" type="hidden" id="ID_FOURNISSEUR" name="ID_FOURNISSEUR"  value="<?=$data['ID_FOURNISSEUR']?>">
                 <div class="col-sm-6 form-group">
-                  <label>Nom <span class="text-danger">*</span></label>
-                  <input class="form-control" type="text" id="NOM" name="NOM" placeholder="Nom" value="<?=set_value('NOM',$data['NOM'])?>">
-                  <?php echo form_error('NOM', '<div class="text-danger">', '</div>'); ?>
+                  <label>Description <span class="text-danger">*</span></label>
+                  <input class="form-control" type="text" id="DESCRIPTION" name="DESCRIPTION" placeholder="Description" value="<?=set_value('DESCRIPTION')?>">
+                  <?php echo form_error('DESCRIPTION', '<div class="text-danger">', '</div>'); ?>
                 </div>
                   <div class="col-sm-6 form-group">
-                  <label>E-mail <span class="text-danger">*</span></label>
-                  <input class="form-control" type="email" class="form-control" id="EMAIL" name="EMAIL" placeholder="username@superbat.bi" value="<?=set_value('EMAIL',$data['EMAIL'])?>">
-                  <?php echo form_error('EMAIL', '<div class="text-danger">', '</div>'); ?>
+                  <label>Caracterisitique <span class="text-danger">*</span></label>
+                  <input class="form-control" type="text" class="form-control" id="CARACTERISTIQUE" name="CARACTERISTIQUE" placeholder="caracteristique" value="<?=set_value('CARACTERISTIQUE')?>">
+                  <?php echo form_error('CARACTERISTIQUE', '<div class="text-danger">', '</div>'); ?>
                 </div>
-                <div class="col-sm-6 form-group">
-                  <label>T&eacute;l&eacute;phone <span class="text-danger">*</span></label>
-                  <input class="form-control" type="text" id="TELEPHONE" name="TELEPHONE" placeholder="T&eacute;l&eacute;phone" value="<?=set_value('TELEPHONE',$data['TELEPHONE'])?>">
-                  <?php echo form_error('TELEPHONE', '<div class="text-danger">', '</div>'); ?>
-                </div>
-
-                <div class="col-sm-6 form-group">
-                  <label>Localit&eacute; <span class="text-danger">*</span></label>
-                  <input class="form-control" type="text" id="LOCALITE" name="LOCALITE" placeholder="Localit&eacute;" value="<?=set_value('LOCALITE',$data['LOCALITE'])?>">
-                  <?php echo form_error('LOCALITE', '<div class="text-danger">', '</div>'); ?>
-                </div>
-              
-    
+                
 
            </div>
 

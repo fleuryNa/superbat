@@ -32,17 +32,21 @@
         <div class="ibox">
 
           <?php 
-          include 'includes/menu_founisseur.php';
+          include 'includes/menu_stock.php';
           ?>
           <div class="ibox-body">
 
             <table class="table table-striped table-bordered table-hover table-modern" id="mytable" cellspacing="0" width="100%">
               <thead>
                 <tr>
-                  <th>Nom</th>
-                  <th>Email</th>
-                  <th>Telephone</th>
-                  <th>Localite</th>
+                  <th>Type matiere</th>
+                  <th>Colis</th>
+                  <th>Longueur</th>
+                  <th>Qté commandée</th>
+                  <th>Qté reçue</th>
+                  <th>Fournisseur</th>
+                  <th>Utilisateur</th>
+                  <th>Date d'entrée</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -75,7 +79,7 @@
   });
 
   function liste_search() {
-    var url = "<?= base_url() ?>stock_matieres/Fournisseur/listing";
+    var url = "<?= base_url() ?>stock_matieres/Stock_matieres/listing";
     var row_count = "1000000";
     table = $("#mytable").DataTable({
       "processing": true,
