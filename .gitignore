@@ -47,3 +47,5 @@ Thumbs.db
 # Uploads (si applicable)
 uploads/
 assets/uploads/
+
+application/libraries/*.zip
