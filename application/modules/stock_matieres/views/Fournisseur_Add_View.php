@@ -77,7 +77,7 @@
 </div>
 
 <!-- SETTINGS / BACKDROPS -->
-<?php include VIEWPATH.'includes/settings.php'; ?>
+<!-- <?php include VIEWPATH.'includes/settings.php'; ?> -->
 <div class="sidenav-backdrop backdrop"></div>
 <div class="preloader-backdrop">
   <div class="page-preloader">Loading</div>

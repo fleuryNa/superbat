@@ -41,35 +41,30 @@
                 <div class="tab-content">
                   <div class="tab-pane fade show active" id="tab-1-1"> 
                     <form action="<?= base_url('stock_matieres/Commande_production/traitement'); ?>" method="POST">
-
-                        <table class="table table-striped table-bordered table-hover table-modern" id="mytable" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Demandeur</th>
-                                    <th>Type matières</th>
-                                    <th>Nombre colis</th>
-                                    <th>Quantité (Tonne)</th>
-
-                                    <th>#</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <?php foreach ($commandes as $cmd): ?>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover table-modern" id="mytable" width="100%">
+                                <thead>
                                     <tr>
-                                        <td><?= date("d/m/Y", strtotime($cmd['DATE_INSERTION'])); ?></td>
-                                        <td><?= $cmd['NOM']; ?></td>
-                                        <td><?= $cmd['DESCRIPTION']; ?></td>
-                                        <td class="text-center">
-                                            <input 
-                                            type="text" 
-                                            name="nombre_colis[]" 
-                                            style="width:80%;"
-                                            class="form-control"
-                                            value="<?= $cmd['NOMBRE_COLIS']; ?>"
-                                            >
+                                        <th>Date</th>
+                                        <th>Demandeur</th>
+                                        <th>Type matières</th>
+                                        <th>Nombre colis</th>
+                                        <th>Quantité (Tonne)</th>
+
+                                        <th>#</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <?php foreach ($commandes as $cmd): ?>
+                                        <tr>
+                                            <td><?= date("d/m/Y", strtotime($cmd['DATE_INSERTION'])); ?></td>
+                                            <td><?= $cmd['NOM']; ?></td>
+                                            <td><?= $cmd['DESCRIPTION']; ?>
+                                            <input type="hidden" name="id_matiere[]" value="<?= $cmd['ID_TYPE_MATIERE']; ?>">
+
                                         </td>
+                                        <td><?= $cmd['NUMERO_COLIS']; ?></td>
 
                                         <td class="text-center">
                                             <input 
@@ -82,8 +77,8 @@
 
                                         </td>
 
-                                         <!-- ID caché pour récupération -->
-                                            <input type="hidden" name="id_commande[]" value="<?= $cmd['ID_COMANDE_PROD']; ?>">
+                                        <!-- ID caché pour récupération -->
+                                        <input type="hidden" name="id_commande[]" value="<?= $cmd['ID_COMANDE_PROD']; ?>">
 
                                         <!-- Checkbox -->
                                         <td class="text-center">
@@ -96,23 +91,25 @@
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
+                    </div>
+                    <div class="text-right mt-3">
+                        <button type="submit" class="btn btn-primary">
+                            Mettre en production
+                        </button>
+                    </div>
 
-                        <div class="text-right mt-3">
-                            <button type="submit" class="btn btn-primary">
-                                Enregistrer la sélection
-                            </button>
-                        </div>
-
-                    </form>
-                </div>
-                <div class="tab-pane" id="tab-1-2">  
+                </form>
+            </div>
+            <div class="tab-pane" id="tab-1-2">
+                <div class="table-responsive">  
                  <table class="table table-striped table-bordered table-hover table-modern" id="mytable3" cellspacing="0" width="100%">
                     <thead>
                       <tr>
                        <th>Gestionnaire</th>
                        <th>Type matières</th>
                        <th>Nombre colis</th>
-                       <th>Quantité (Tonne)</th>
+                       <th>Qté (Tonne)</th>
+                       <th>Statut</th>
                        <th>Date</th>
                        <th>Actions</th>
                    </tr>
@@ -120,17 +117,65 @@
                <tbody>
                   <!-- Les données seront chargées dynamiquement par DataTables -->
               </tbody>
-          </table></div>
-
+          </table>
       </div>
   </div>
+
+</div>
+</div>
+</div>
+
+
+
+<div class="modal fade" id="modalColonnes" tabindex="-1" role="dialog" aria-labelledby="modalColonnesLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="max-width: 70%;">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalColonnesLabel">Détails des informations</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped" id="mytable_histo">
+          <thead class="thead-light">
+            <tr>
+              <th>Gestionnaire</th>
+              <th>Type matières</th>
+              <th>N colis</th>
+              <th>Quantité (Tonne)</th>
+              <th>Statut</th>
+              <th>Date</th>
+
+          </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="9" class="text-center text-muted">
+            Aperçu des colonnes (pas de données)
+        </td>
+    </tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+</div>
+
+</div>
+</div>
 </div>
 
 <?php include VIEWPATH.'includes/footer.php'; ?>
 </div>
 </div>
 
-<?php include VIEWPATH.'includes/settings.php'; ?>
+<!-- <?php include VIEWPATH.'includes/settings.php'; ?> -->
 
 <div class="sidenav-backdrop backdrop"></div>
 <div class="preloader-backdrop">
@@ -182,7 +227,7 @@
     liste_livre();
 });
  function liste_livre() {
-    var url = "<?= base_url() ?>production/Commander/listing_livrer";
+    var url = "<?= base_url() ?>stock_matieres/Commande_production/listing_livrer";
     var row_count = "1000000";
     table = $("#mytable3").DataTable({
       "processing": true,
@@ -213,6 +258,61 @@
 });
 }
 </script>
+
+
+
+<script>
+  function get_histo(id) {
+      // alert(id)
+    // Ouvrir le modal Bootstrap
+    $('#modalColonnes').modal('show');
+
+    // Attendre que le modal soit visible
+    $('#modalColonnes').on('shown.bs.modal', function () {
+
+      var url = "<?= base_url() ?>production/Commander/get_details";
+      var row_count = 1000000;
+
+      if ($.fn.DataTable.isDataTable('#mytable_histo')) {
+        $('#mytable_histo').DataTable().clear().destroy();
+    }
+
+
+    $('#mytable_histo').DataTable({
+        processing: true,
+        destroy: true,
+        serverSide: true,
+        order: [[0, 'desc']],
+        ajax: {
+          url: url,
+          type: "POST",
+          data: { id: id }
+      },
+      lengthMenu: [[5, 10, 50, 100, row_count], [5, 10, 50, 100, "All"]],
+      pageLength: 10,
+      dom: 'Bfrtlip',
+      buttons: ['copy', 'excel', 'pdf'],
+      language: {
+          sProcessing: "Traitement en cours...",
+          sSearch: "Rechercher :",
+          sLengthMenu: "Afficher _MENU_ éléments",
+          sInfo: "Affichage de _START_ à _END_ sur _TOTAL_ éléments",
+          sInfoEmpty: "Aucun élément",
+          sZeroRecords: "Aucun résultat",
+          sEmptyTable: "Aucune donnée disponible",
+          oPaginate: {
+            sFirst: "Premier",
+            sPrevious: "Précédent",
+            sNext: "Suivant",
+            sLast: "Dernier"
+        }
+    }
+});
+
+});
+}
+</script>
+
 
 
 

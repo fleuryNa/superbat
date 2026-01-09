@@ -39,12 +39,12 @@
               <div class="row">
                  <input class="form-control" type="hidden" id="ID_TYPE_MATIERE" name="ID_TYPE_MATIERE"  value="<?=$data['ID_TYPE_MATIERE']?>">
                 <div class="col-sm-6 form-group">
-                  <label>Nom <span class="text-danger">*</span></label>
+                  <label>Description <span class="text-danger">*</span></label>
                   <input class="form-control" type="text" id="DESCRIPTION" name="DESCRIPTION" placeholder="Description" value="<?=set_value('DESCRIPTION',$data['DESCRIPTION'])?>">
                   <?php echo form_error('DESCRIPTION', '<div class="text-danger">', '</div>'); ?>
                 </div>
                   <div class="col-sm-6 form-group">
-                  <label>E-mail <span class="text-danger">*</span></label>
+                  <label>Caracterisitique <span class="text-danger">*</span></label>
                   <input class="form-control" type="text" class="form-control" id="CARACTERISTIQUE" name="CARACTERISTIQUE" placeholder="caracteristique" value="<?=set_value('CARACTERISTIQUE',$data['CARACTERISTIQUE'])?>">
                   <?php echo form_error('CARACTERISTIQUE', '<div class="text-danger">', '</div>'); ?>
                 </div>
@@ -64,7 +64,7 @@
 </div>
 
 <!-- SETTINGS / BACKDROPS -->
-<?php include VIEWPATH.'includes/settings.php'; ?>
+<!-- <?php include VIEWPATH.'includes/settings.php'; ?> -->
 <div class="sidenav-backdrop backdrop"></div>
 <div class="preloader-backdrop">
   <div class="page-preloader">Loading</div>

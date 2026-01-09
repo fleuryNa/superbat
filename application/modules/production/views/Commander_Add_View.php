@@ -39,7 +39,7 @@
               <div class="row">
 
 
-                <div class="col-sm-3 form-group">
+                <div class="col-sm-4 form-group">
                   <label class="form-control-label">Type de matieres</label>
                   <select class="form-control select2_demo_1" id="ID_TYPE_MATIERE" name="ID_TYPE_MATIERE">
                     <option value="">--select--</option>
@@ -49,12 +49,8 @@
                   </select>
                   <font color='red' id="errorID_TYPE_MATIERE"></font>
                 </div>
-                <div class="col-sm-3 form-group">
-                  <label>Numero de colis <span class="text-danger">*</span></label>
-                  <input class="form-control" type="number" class="form-control" id="NUMERO_COLIS" name="NUMERO_COLIS" value="<?=set_value('NUMERO_COLIS')?>">
-                  <font color='red' id="errorNUMERO_COLIS"></font>
-                </div>
-                <div class="col-sm-3 form-group">
+                
+                <div class="col-sm-4 form-group">
                   <label>Quantite<span class="text-danger">*</span></label>
                   <input class="form-control" type="number" id="QUANTITE_TONNE" name="QUANTITE_TONNE" value="<?=set_value('QUANTITE_TONNE')?>">
                   <font color='red' id="errorQUANTITE_TONNE"></font>
@@ -65,7 +61,7 @@
                 </div>
               </div>
 
-             <div id="divdata" style="margin-left: 0px;width: auto;"></div>
+              <div id="divdata" style="margin-left: 0px;width: auto;"></div>
 
 
             </form>
@@ -79,7 +75,7 @@
   </div>
 
 <!-- SETTINGS / BACKDROPS -->
-<?php include VIEWPATH.'includes/settings.php'; ?>
+<!-- <?php include VIEWPATH.'includes/settings.php'; ?> -->
 <div class="sidenav-backdrop backdrop"></div>
 <div class="preloader-backdrop">
   <div class="page-preloader">Loading</div>
@@ -95,7 +91,6 @@
   $('#btnadd').click(function(){
 
     var ID_TYPE_MATIERE=$('#ID_TYPE_MATIERE').val();
-    var NUMERO_COLIS=$('#NUMERO_COLIS').val();
     var QUANTITE_TONNE=$('#QUANTITE_TONNE').val();
     
 
@@ -120,24 +115,23 @@
      $('#errorQUANTITE_TONNE').html(''); 
    }
 
-  
+   
 
-if(ID_TYPE_MATIERE!="" && QUANTITE_TONNE!="" ) 
-{
+   if(ID_TYPE_MATIERE!="" && QUANTITE_TONNE!="" ) 
+   {
 
-  $.post("<?php echo base_url('production/Commander/addcart/'); ?>", 
-    {ID_TYPE_MATIERE:ID_TYPE_MATIERE,QUANTITE_TONNE:QUANTITE_TONNE,NUMERO_COLIS:NUMERO_COLIS},
+    $.post("<?php echo base_url('production/Commander/addcart/'); ?>", 
+      {ID_TYPE_MATIERE:ID_TYPE_MATIERE,QUANTITE_TONNE:QUANTITE_TONNE},
 
-    function(resp){
+      function(resp){
 
-      $('#divdata').html(resp);
-      $('#ID_TYPE_MATIERE').val('');
-      $('#QUANTITE_TONNE').val('');
-      $('#NUMERO_COLIS').val('');
+        $('#divdata').html(resp);
+        $('#ID_TYPE_MATIERE').val('');
+        $('#QUANTITE_TONNE').val('');
 
-    });}
+      });}
 
-});
+  });
 });
 
 

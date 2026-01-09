@@ -36,7 +36,14 @@
           ?>
           <div class="ibox-body">
 
-            <table class="table table-striped table-bordered table-hover table-modern" id="mytable" cellspacing="0" width="100%">
+
+           <?php
+           if(!empty($this->session->flashdata('message')))
+             echo $this->session->flashdata('message');
+
+           ?>
+           <div class="table-responsive">
+             <table class="table table-striped table-bordered table-hover table-modern" id="mytable" cellspacing="0" width="100%">
               <thead>
                 <tr>
                   <th>Type matiere</th>
@@ -47,6 +54,7 @@
                   <th>Fournisseur</th>
                   <th>Utilisateur</th>
                   <th>Date d'entrée</th>
+                  <th>Statut</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -57,14 +65,63 @@
           </div>
         </div>
       </div>
-      <!-- END PAGE CONTENT -->
+    </div>
+    <!-- END PAGE CONTENT -->
 
-      <?php include VIEWPATH.'includes/footer.php'; ?>
+    <?php include VIEWPATH.'includes/footer.php'; ?>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalColonnes" tabindex="-1" role="dialog" aria-labelledby="modalColonnesLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document" style="max-width: 70%;">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalColonnesLabel">Détails des informations</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped" id="mytable_histo">
+            <thead class="thead-light">
+              <tr>
+                <th>Date d'entrée</th>
+                <th>Utilisateur</th>
+                <th>Fournisseur</th>
+                <th>Type matière</th>
+                <th>Qté commandée</th>
+                <th>Qté reçue</th>
+                <th>Motif</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="9" class="text-center text-muted">
+                  Aperçu des colonnes (pas de données)
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+      </div>
+
     </div>
   </div>
+</div>
+
 
 <!-- SETTINGS / BACKDROPS -->
-<?php include VIEWPATH.'includes/settings.php'; ?>
+<!-- <?php include VIEWPATH.'includes/settings.php'; ?> -->
 <div class="sidenav-backdrop backdrop"></div>
 <div class="preloader-backdrop">
   <div class="page-preloader">Loading</div>
@@ -107,6 +164,58 @@
           "sLast": "Dernier"
         }
       }
+    });
+  }
+</script>
+
+<script>
+  function get_histo(id) {
+      // alert(id)
+    // Ouvrir le modal Bootstrap
+    $('#modalColonnes').modal('show');
+
+    // Attendre que le modal soit visible
+    $('#modalColonnes').on('shown.bs.modal', function () {
+
+      var url = "<?= base_url() ?>stock_matieres/Stock_matieres/get_details";
+      var row_count = 1000000;
+
+      if ($.fn.DataTable.isDataTable('#mytable_histo')) {
+        $('#mytable_histo').DataTable().clear().destroy();
+      }
+
+
+      $('#mytable_histo').DataTable({
+        processing: true,
+        destroy: true,
+        serverSide: true,
+        order: [[0, 'desc']],
+        ajax: {
+          url: url,
+          type: "POST",
+          data: { id: id }
+        },
+        lengthMenu: [[5, 10, 50, 100, row_count], [5, 10, 50, 100, "All"]],
+        pageLength: 10,
+        dom: 'Bfrtlip',
+        buttons: ['copy', 'excel', 'pdf'],
+        language: {
+          sProcessing: "Traitement en cours...",
+          sSearch: "Rechercher :",
+          sLengthMenu: "Afficher _MENU_ éléments",
+          sInfo: "Affichage de _START_ à _END_ sur _TOTAL_ éléments",
+          sInfoEmpty: "Aucun élément",
+          sZeroRecords: "Aucun résultat",
+          sEmptyTable: "Aucune donnée disponible",
+          oPaginate: {
+            sFirst: "Premier",
+            sPrevious: "Précédent",
+            sNext: "Suivant",
+            sLast: "Dernier"
+          }
+        }
+      });
+
     });
   }
 </script>

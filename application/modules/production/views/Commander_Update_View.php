@@ -1,248 +1,112 @@
-<?php
-  include VIEWPATH.'includes/new_header.php';
-  ?>
-  
-<!-- Site wrapper -->
-<div class="wrapper">
-  <?php
-  include VIEWPATH.'includes/new_top_menu.php';
-  include VIEWPATH.'includes/new_menu_principal.php';
-  ?>
+<!DOCTYPE html>
+<html lang="en">
+<?php include VIEWPATH.'includes/header.php'; ?>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
+<body class="fixed-navbar">
+  <div class="page-wrapper">
 
-  
+    <!-- START HEADER -->
+    <?php include VIEWPATH.'includes/navbar.php'; ?>
+    <!-- END HEADER -->
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <?php 
-   include 'includes/menu_type_doc.php';
-    ?>
+    <!-- START SIDEBAR -->
+    <?php include VIEWPATH.'includes/sidebarMenu.php'; ?>
+    <!-- END SIDEBAR -->
 
-    <!-- Main content -->
-    <section class="content">
-
-      <!-- Default box -->
-      <div class="card">
-
-      <div class="card card-primary">
-              <div class="card-header">
-                <h3 class="card-title">Modification d'un nouveau type de document</h3>
-              </div>
-              <!-- /.card-header -->
-              <!-- form start -->
-              <form id="FormData" action="<?php echo base_url()?>configuration/Type_Doc/update" method="POST" enctype="multipart/form-data">
-
-                <input type="hidden" name="DOC_TYPE_ID" id="DOC_TYPE_ID" value="<?=$typesdoc['DOC_TYPE_ID']?>">
-                <div class="card-body row">
-                  <div class="form-group col-lg-6">
-                    <label for="exampleInputEmail1">Description <spam class="text-danger">*</spam> </label>
-                    <input type="text" class="form-control" id="DESC_TYPE" name="DESC_TYPE" placeholder="Type de document" value="<?=$typesdoc['DESC_TYPE']?>">
-                     <font color='red' id="errortype"></font> 
-                  </div>
-  
-                </div>
-
-          <!-- DEBUT CART -->
-          <br>
-        <table class="table table-bordered">
-
-          <thead>
-            <th> 
-                <label for="exampleInputEmail1" class="col-lg-3 col-md-3 col-sm-4">Profil</label>
-              </th>
-
-              <th> 
-                <label for="exampleInputEmail1" class="col-lg-3 col-md-3 col-sm-4">Actions</label>
-              </th>
-
-                 <th> 
-                <label for="exampleInputEmail1" class="col-lg-3 col-md-3 col-sm-4">Numéro</label>
-              </th>
-
-          </thead>
-
-          <tbody>
-            
-           <td>
-
-        <select name="PROFIL_ID" id="PROFIL_ID" class="form-control input-sm">
-            <option value="">Séléctionner</option>
-              <?php foreach($profiles as $p)
-              { ?>
-              <option value="<?php echo $p['PROFIL_ID'] ?>" <?php echo  set_select('PROFIL_ID', $p['PROFIL_ID']); ?> <?= ($PROFIL_ID == $p['PROFIL_ID'])?"selected":"" ?> ><?php echo $p['DESCRIPTION']?></option>
-                <?php
-                 } ?>
-
-              </select>
-            <font color='red' id="errorprofil"></font> 
-             
-           </td>
+    <div class="content-wrapper">
 
 
-          <td>
-
-           <select name="STATUT_DOC_ID" id="STATUT_DOC_ID" class="form-control input-sm">
-            <option value="">Séléctionner</option>
-              <?php foreach($etapes as $etap)
-              { ?>
-              <option value="<?php echo $etap['STATUT_DOC_ID'] ?>" <?php echo  set_select('STATUT_DOC_ID', $etap['STATUT_DOC_ID']); ?> <?= ($STATUT_DOC_ID == $etap['STATUT_DOC_ID'])?"selected":"" ?> ><?php echo $etap['DESC_STATUT']?></option>
-                <?php
-                 } ?>
-
-              </select>
-            <font color='red' id="erroretape"></font> 
-             
-           </td>
-
-
-          <td>   
-          <input type="number" name="NUM" id="NUM" class="form-control col-lg-3 col-md-3 col-sm-4">
-          <font color='red' id="errornum"></font> 
-         </td>
-
-
-
-          <td>
-            <button type="button" name="btnadd" class="btn btn-primary" id="btnadd">Ajouter</button>
-           </td>
-
-
-          </tbody>
-
-
-          </table>
-
-           <div id="divcart" style="margin-left: 0px;width: auto;">
-             <?=$cart?>
-           </div>
-
-          <div id="divdata" style="margin-left: 0px;width: auto;"></div>
-
-
-
-
-          <!-- FIN CART -->
-
-                <!-- /.card-body -->
-
-
-              </form>
-            </div>
-        
-        
-        <!-- /.card-body -->
-        <!-- <div class="card-footer">
-          Footer
-        </div> -->
-        <!-- /.card-footer-->
+      <!-- PAGE HEADING (si tu veux le garder aussi) -->
+      <div class="page-heading">
+        <h1 class="page-title"><?= $title; ?></h1>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="index.html"><i class="la la-home font-20"></i></a>
+          </li>
+          <li class="breadcrumb-item"><?= $title; ?></li>
+        </ol>
       </div>
-      <!-- /.card -->
 
-    </section>
-    <!-- /.content -->
+      <!-- PAGE CONTENT -->
+      <div class="page-content fade-in-up">
+        <div class="ibox">
+
+          <?php 
+            include 'includes/menu_commande.php';
+          ?>
+          <div class="ibox-body">
+            <form id="FormData" action="<?php echo base_url()?>production/Commander/update" method="POST" enctype="multipart/form-data">
+              <div class="row">
+                <input class="form-control" type="hidden" id="ID_COMANDE_PROD" name="ID_COMANDE_PROD"  value="<?=$data['ID_COMANDE_PROD']?>">
+
+                <div class="col-sm-6 form-group">
+                  <label class="form-control-label">Type de matieres <span class="text-danger">*</span></label>
+                  <select class="form-control select2_demo_1" id="ID_TYPE_MATIERE" name="ID_TYPE_MATIERE">
+                    <option value="">--select--</option>
+                    <?php foreach($type_matieres as $type){?>
+                    <option value="<?= $type['ID_TYPE_MATIERE']?>" <?= set_value('ID_TYPE_MATIERE',$data['ID_TYPE_MATIERE']) == $type['ID_TYPE_MATIERE'] ? 'selected' : '' ?>><?= $type['DESCRIPTION'].'('.$type['CARACTERISTIQUE'].')' ?></option> 
+                    <?php }?> 
+                  </select>
+                  <?php echo form_error('ID_TYPE_MATIERE', '<div class="text-danger">', '</div>'); ?>
+                </div>
+              
+                <div class="col-sm-6 form-group">
+                  <label>Quantité <span class="text-danger">*</span></label>
+                  <input class="form-control" type="text" class="form-control" id="QUANTITE_TONNE" name="QUANTITE_TONNE" placeholder="Entrez la quantité" value="<?=set_value('QUANTITE_TONNE',$data['QUANTITE_TONNE'])?>">
+                  <?php echo form_error('QUANTITE_TONNE', '<div class="text-danger">', '</div>'); ?>
+                </div>
+               
+              </div>
+
+              <div class="form-group">
+                <button class="btn btn-success btn-block" type="submit">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- END PAGE CONTENT -->
+
+      <?php include VIEWPATH.'includes/footer.php'; ?>
+    </div>
   </div>
-  <!-- /.content-wrapper -->
 
-  <?php
- include VIEWPATH.'includes/new_copy_footer.php';  
-  ?>
-  <!-- /.control-sidebar -->
+<!-- SETTINGS / BACKDROPS -->
+<!-- <?php include VIEWPATH.'includes/settings.php'; ?> -->
+<div class="sidenav-backdrop backdrop"></div>
+<div class="preloader-backdrop">
+  <div class="page-preloader">Loading</div>
 </div>
-<!-- ./wrapper -->
-<?php
-  include VIEWPATH.'includes/new_script.php';
-  ?>
+
+<!-- SCRIPTS -->
+<?php include VIEWPATH.'includes/scripts.php'; ?>
+
+
 <script>
-     $(document).ready(function(){
+  document.getElementById('togglePassword').addEventListener('click', function() {
+    const input = document.getElementById('PASSWORD');
+    const icon = this;
+    
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.classList.remove('fa-eye');
+      icon.classList.add('fa-eye-slash'); // change l’icône
+    } else {
+      input.type = 'password';
+      icon.classList.remove('fa-eye-slash');
+      icon.classList.add('fa-eye');
+    }
+  });
+</script>
 
-      $('#btnadd').click(function(){
-
-        var PROFIL_ID=$('#PROFIL_ID').val();
-        var STATUT_DOC_ID=$('#STATUT_DOC_ID').val();
-        var NUM=$('#NUM').val();
-        var DESC_TYPE=$('#DESC_TYPE').val();
-        var DOC_TYPE_ID=$('#DOC_TYPE_ID').val();
-
-         if (DESC_TYPE=="")
-         {
-         $('#errortype').html('Le type de document est obligatoire');
-         }
-
-         else if (DESC_TYPE!="")
-         {
-         $('#errortype').html(''); 
-         }
-
-
-         if (PROFIL_ID=="")
-         {
-         $('#errorprofil').html('Le profil est obligatoire');
-         }
-
-         else if (PROFIL_ID!="")
-         {
-         $('#errorprofil').html(''); 
-         }
-
-         if (STATUT_DOC_ID=="")
-         {
-          $('#erroretape').html('L\'action est obligatoire');
-         }
-
-         else if (STATUT_DOC_ID!="")
-         {
-         $('#erroretape').html(''); 
-         }
-
-         if(NUM=="")
-          {
-           $('#errornum').html('Le num est obligatoire');
-          }
-
-          else if(NUM!="")
-          {
-          $('#errornum').html('');  
-          }
-
-        if(DESC_TYPE!="" && PROFIL_ID!="" && STATUT_DOC_ID!="" && Number(NUM) >0) 
-        {
-
-        $.post("<?php echo base_url('configuration/Type_Doc/addcart/'); ?>", 
-          {PROFIL_ID:PROFIL_ID,STATUT_DOC_ID:STATUT_DOC_ID,NUM:NUM},
-
-        function(resp){
-     
-        $('#divdata').html(resp);
-        $('#PROFIL_ID').val('');
-        $('#STATUT_DOC_ID').val('');
-        $('#NUM').val('');
-        $('#divcart').hide();
-
-       });}
-
-      });
-     });
-
-
-  function remove_ct(id_row){
-
-  var rowid=$('#rowid'+id_row).val();
-    $.post('<?php echo base_url();?>configuration/Type_Doc/remove_cart',
-  {
-    rowid:rowid
-
-    },
-    function(data)
-    {
-    $('#divdata').html(data);
-    $('#divcart').hide();
+<script>
+    $(document).ready(function() {
+        $('.select2_demo_1').select2({
+            width: '100%',
+            placeholder: "Sélectionnez un élément",
+            allowClear: true
+        });
     });
-
-}
-
 </script>
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
 </html>

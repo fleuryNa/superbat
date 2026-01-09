@@ -10,21 +10,21 @@ class Acceuil extends MX_Controller {
     }
 
     public function Is_Connected()
-       {
-       if (empty($this->session->userdata('SUPERBAT_ID_USER')))
-        {
-         redirect(base_url('Login/'));
-        }
-       }
-
-
-
-    public function index()
     {
-      $data = array();
+     if (empty($this->session->userdata('SUPERBAT_ID_USER')))
+     {
+       redirect(base_url('Login/'));
+   }
+}
 
-      $this->load->view('Acceuil_View',$data);
-    }
+
+
+public function index()
+{
+  $data = array();
+
+  $this->load->view('Acceuil_View',$data);
+}
 
 
 

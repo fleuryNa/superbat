@@ -47,51 +47,106 @@
             </ul>
             <div class="tab-content">
               <div class="tab-pane fade show active" id="tab-1-1"> 
-               <table class="table table-striped table-bordered table-hover table-modern" id="mytable" cellspacing="0" width="100%">
-                <thead>
-                  <tr> 
-                   <th>Gestionnaire</th>
-                   <th>Type matières</th>
-                   <th>Nombre colis</th>
-                   <th>Quantité (Tonne)</th>
-                   <th>Date</th>
-                   <th>Actions</th>
-                 </tr>
-               </thead>
-               <tbody>
-                <!-- Les données seront chargées dynamiquement par DataTables -->
-              </tbody>
-            </table></div>
-            <div class="tab-pane" id="tab-1-2">  
-              <table class="table table-striped table-bordered table-hover table-modern" id="mytable3" cellspacing="0" width="100%">
-                <thead>
-                  <tr>
-                   <th>Gestionnaire</th>
-                   <th>Type matières</th>
-                   <th>Nombre colis</th>
-                   <th>Quantité (Tonne)</th>
-                   <th>Date</th>
-                   <th>Actions</th>
-                 </tr>
-               </thead>
-               <tbody>
-                
-               </tbody>
-             </table>
-           </div>
-         </div>
+               <div class="table-responsive"> 
+                 <table class="table table-striped table-bordered table-hover table-modern" id="mytable" cellspacing="0" width="100%">
+                  <thead>
+                    <tr> 
+                     <th>Gestionnaire</th>
+                     <th>Type matières</th>
+                     <th>N colis</th>
+                     <th>Quantité (Tonne)</th>
+                     <th>Statut</th>
+                     <th>Date</th>
+                     <th>Actions</th>
+                   </tr>
+                 </thead>
+                 <tbody>
+                  <!-- Les données seront chargées dynamiquement par DataTables -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane" id="tab-1-2"> 
+           <div class="table-responsive">  
+            <table class="table table-striped table-bordered table-hover table-modern" id="mytable3" cellspacing="0" width="100%">
+              <thead>
+                <tr>
+                 <th>Gestionnaire</th>
+                 <th>Type matières</th>
+                 <th>N colis</th>
+                 <th>Qté Restante</th>
+                 <th>Qté Consommé</th>
+                 <th>Statut</th>
+                 <th>Date</th>
+                 <th>Actions</th>
+               </tr>
+             </thead>
+             <tbody>
 
+             </tbody>
+           </table>
+         </div>
        </div>
      </div>
-   </div>
-   <!-- END PAGE CONTENT -->
 
-   <?php include VIEWPATH.'includes/footer.php'; ?>
+   </div>
  </div>
+</div>
+<!-- END PAGE CONTENT -->
+
+
+<div class="modal fade" id="modalColonnes" tabindex="-1" role="dialog" aria-labelledby="modalColonnesLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document" style="max-width: 70%;">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalColonnesLabel">Détails des informations</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped" id="mytable_histo">
+            <thead class="thead-light">
+              <tr>
+                <th>Gestionnaire</th>
+                <th>Type matières</th>
+                <th>Nombre colis</th>
+                <th>Quantité (Tonne)</th>
+                <th>Statut</th>
+                <th>Date</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="9" class="text-center text-muted">
+                  Aperçu des colonnes (pas de données)
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<?php include VIEWPATH.'includes/footer.php'; ?>
+</div>
 </div>
 
 <!-- SETTINGS / BACKDROPS -->
-<?php include VIEWPATH.'includes/settings.php'; ?>
+<!-- <?php include VIEWPATH.'includes/settings.php'; ?> -->
 <div class="sidenav-backdrop backdrop"></div>
 <div class="preloader-backdrop">
   <div class="page-preloader">Loading</div>
@@ -175,6 +230,61 @@
     });
   }
 </script>
+
+
+
+<script>
+  function get_histo(id) {
+      // alert(id)
+    // Ouvrir le modal Bootstrap
+    $('#modalColonnes').modal('show');
+
+    // Attendre que le modal soit visible
+    $('#modalColonnes').on('shown.bs.modal', function () {
+
+      var url = "<?= base_url() ?>production/Commander/get_details";
+      var row_count = 1000000;
+
+      if ($.fn.DataTable.isDataTable('#mytable_histo')) {
+        $('#mytable_histo').DataTable().clear().destroy();
+      }
+
+
+      $('#mytable_histo').DataTable({
+        processing: true,
+        destroy: true,
+        serverSide: true,
+        order: [[0, 'desc']],
+        ajax: {
+          url: url,
+          type: "POST",
+          data: { id: id }
+        },
+        lengthMenu: [[5, 10, 50, 100, row_count], [5, 10, 50, 100, "All"]],
+        pageLength: 10,
+        dom: 'Bfrtlip',
+        buttons: ['copy', 'excel', 'pdf'],
+        language: {
+          sProcessing: "Traitement en cours...",
+          sSearch: "Rechercher :",
+          sLengthMenu: "Afficher _MENU_ éléments",
+          sInfo: "Affichage de _START_ à _END_ sur _TOTAL_ éléments",
+          sInfoEmpty: "Aucun élément",
+          sZeroRecords: "Aucun résultat",
+          sEmptyTable: "Aucune donnée disponible",
+          oPaginate: {
+            sFirst: "Premier",
+            sPrevious: "Précédent",
+            sNext: "Suivant",
+            sLast: "Dernier"
+          }
+        }
+      });
+
+    });
+  }
+</script>
+
 
 
 </body>

@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width initial-scale=1.0">
     <title>Superbat | Login</title>
     <!-- GLOBAL MAINLY STYLES-->
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="<?php echo base_url('assets/uploads/superbat.png'); ?>">
     <link href="<?= base_url()?>/assets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="<?= base_url()?>/assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
     <link href="<?= base_url()?>/assets/vendors/themify-icons/css/themify-icons.css" rel="stylesheet" />
@@ -14,42 +16,67 @@
     <link href="<?= base_url()?>/assets/css/main.css" rel="stylesheet" />
     <!-- PAGE LEVEL STYLES-->
     <link href="<?= base_url()?>/assets/css/pages/auth-light.css" rel="stylesheet" />
+
+    <style>
+        .brand {
+            text-align: center;
+            display: flex;
+            flex-direction: column;   /* place le texte en haut, logo en bas */
+            align-items: center;      /* centre horizontalement */
+        }
+
+        .brand .link {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 5px;       /* espace entre texte et logo */
+        }
+
+        .brand-logo {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+
+    </style>
 </head>
 
 <body class="bg-silver-300">
     <div class="content">
         <div class="brand">
             <a class="link" >SUPERBAT</a>
+            <img src="<?= base_url()?>assets/img/logos/supertbat.png" class="brand-logo">
         </div>
         <form id="login-fo" action="<?= base_url('Login/do_login') ?>" method="post">
             <h2 class="login-title">Log in</h2>
 
-              <?php 
-                          if(!empty($this->session->flashdata('message')))
-                             echo $this->session->flashdata('message');
-            ?>
-            <div class="form-group">
-                <div class="input-group-icon right">
-                    <div class="input-icon"><i class="fa fa-envelope"></i></div>
-                    <input class="form-control" type="USERNAME" name="USERNAME" placeholder="Email" autocomplete="off">
-                </div>
+            <?php 
+            if(!empty($this->session->flashdata('message')))
+             echo $this->session->flashdata('message');
+         ?>
+         <div class="form-group">
+            <div class="input-group-icon right">
+                <div class="input-icon"><i class="fa fa-envelope"></i></div>
+                <input class="form-control" type="USERNAME" name="USERNAME" placeholder="Email" autocomplete="off">
             </div>
-            <div class="form-group">
-                <div class="input-group-icon right">
-                    <div class="input-icon"><i class="fa fa-lock font-16"></i></div>
-                    <input class="form-control" type="password" name="PASSWORD" id="password">
-                </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group-icon right">
+                <div class="input-icon"><i class="fa fa-lock font-16"></i></div>
+                <input class="form-control" type="password" name="PASSWORD" id="password">
             </div>
-            <div class="form-group d-flex justify-content-between" onchange="myPassword()">
-                <label class="ui-checkbox ui-checkbox-info">
-                    <input type="checkbox">
-                    <span class="input-span"></span>Voir le mot de passe</label>
+        </div>
+        <div class="form-group d-flex justify-content-between" onchange="myPassword()">
+            <label class="ui-checkbox ui-checkbox-info">
+                <input type="checkbox">
+                <span class="input-span"></span>Voir le mot de passe</label>
                 <a href="<?= base_url()?>/Login/forgotPassword">Mot de passe oublié?</a>
             </div>
             <div class="form-group">
                 <button class="btn btn-info btn-block" type="submit">Login</button>
             </div>
-        
+
         </form>
     </div>
     <!-- BEGIN PAGA BACKDROPS-->
@@ -91,17 +118,17 @@
 
 
 
-function myPassword() {
+        function myPassword() {
 
-  var x = document.getElementById("password");
-  if (x.type === "password") {
-    x.type = "text";
-  } else {
-    x.type = "password";
-  }
-} 
+          var x = document.getElementById("password");
+          if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    } 
 
-    </script>
+</script>
 </body>
 
 </html>

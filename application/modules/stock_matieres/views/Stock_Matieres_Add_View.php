@@ -40,7 +40,7 @@
 
 
                 <div class="col-sm-6 form-group">
-                  <label class="form-control-label">Single select</label>
+                  <label class="form-control-label">Type de matières <span class="text-danger">*</span></label>
                   <select class="form-control select2_demo_1" id="ID_TYPE_MATIERE" name="ID_TYPE_MATIERE">
                     <option value="">--select--</option>
                     <?php foreach($type_matieres as $type){?>
@@ -50,18 +50,18 @@
                   <?php echo form_error('ID_TYPE_MATIERE', '<div class="text-danger">', '</div>'); ?>
                 </div>
                 <div class="col-sm-6 form-group">
-                  <label>Numero de colis <span class="text-danger">*</span></label>
+                  <label>Numero de colis </label>
                   <input class="form-control" type="text" class="form-control" id="NUMERO_COLIS" name="NUMERO_COLIS" placeholder="Numero de colis" value="<?=set_value('NUMERO_COLIS')?>">
                   <?php echo form_error('NUMERO_COLIS', '<div class="text-danger">', '</div>'); ?>
                 </div>
                 <div class="col-sm-6 form-group">
-                  <label>Longueur<span class="text-danger">*</span></label>
+                  <label>Longueur</label>
                   <input class="form-control" type="text" id="LONGEUR" name="LONGEUR" placeholder="Longueur" value="<?=set_value('LONGEUR')?>">
                   <?php echo form_error('LONGEUR', '<div class="text-danger">', '</div>'); ?>
                 </div>
 
                 <div class="col-sm-6 form-group">
-                  <label>Couleur <span class="text-danger">*</span></label>
+                  <label>Couleur </label>
                   <input class="form-control" type="text" id="COULEUR" name="COULEUR" placeholder="Couleur" value="<?=set_value('COULEUR')?>">
                   <?php echo form_error('COULEUR', '<div class="text-danger">', '</div>'); ?>
                 </div>
@@ -113,7 +113,7 @@
   </div>
 
 <!-- SETTINGS / BACKDROPS -->
-<?php include VIEWPATH.'includes/settings.php'; ?>
+<!-- <?php include VIEWPATH.'includes/settings.php'; ?> -->
 <div class="sidenav-backdrop backdrop"></div>
 <div class="preloader-backdrop">
   <div class="page-preloader">Loading</div>

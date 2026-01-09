@@ -1,5 +1,5 @@
     <div class="ibox-head d-flex justify-content-between align-items-center">
-      <div class="ibox-title">Gestion des Profils de Droits</div>
+      <div class="ibox-title"></div>
       <div>
         <a class="btn <?php if($this->router->method == 'ajouter') echo 'btn-primary';?> btn-sm"
          href="<?=base_url('stock_matieres/Type_matieres/ajouter')?>">Ajouter</a>

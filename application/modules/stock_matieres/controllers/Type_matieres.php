@@ -47,7 +47,7 @@ class Type_matieres extends MY_Controller {
 
 			$row[] = $key->DESCRIPTION;
 			$row[] = $key->CARACTERISTIQUE;
-			$row[] = $key->IS_ACTIF ? "Actif" : "Inactif";
+			// $row[] = $key->IS_ACTIF ? "Actif" : "Inactif";
 			
 			$row[] = '
 			<div class="modal fade" id="rendreeff'.$key->ID_TYPE_MATIERE.'" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
