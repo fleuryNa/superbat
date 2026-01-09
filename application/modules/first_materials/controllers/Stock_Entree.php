@@ -124,7 +124,7 @@ class Stock_Entree extends MY_Controller {
 
 	public function ajouter()
 	{
-		$data['title']='Utilisateur';
+		$data['title']='STOCK MATIERES PREMIERES';
 
 		$data['type_mat']=$this->Model->getRequete('SELECT * FROM `type_matieres` order by DESCRIPTION');
 
@@ -144,30 +144,45 @@ class Stock_Entree extends MY_Controller {
 
 	public function save()
 	{
-		$NOM=$this->input->post('NOM');
 
-		$PRENOM=$this->input->post('PRENOM');
+$ID_TYPE_MATIERE=$this->input->post('ID_TYPE_MATIERE');
 
-		$USERNAME=$this->input->post('USERNAME');
+		$NUMERO_COLIS=$this->input->post('NUMERO_COLIS');
 
-		$PASSWORD=$this->input->post('PASSWORD');
+		$LONGEUR=$this->input->post('LONGEUR');
 
-		$PROFIL_ID=$this->input->post('PROFIL_ID');
+		$COULEUR=$this->input->post('COULEUR');
 
-		$ID_AGENCE=$this->input->post('ID_AGENCE');
+		$QUANTITE_COMMANDE=$this->input->post('QUANTITE_COMMANDE');
+
+		$QUANTITE_RECUE=$this->input->post('QUANTITE_RECUE');
+		$ID_FOURNISSEUR=$this->input->post('ID_FOURNISSEUR');
+		$ID_USER=$this->input->post('ID_USER');
+		$DATE_ENTREE=$this->input->post('DATE_ENTREE');
 
 
-		$this->form_validation->set_rules('NOM', 'Noms', 'required');
 
-		$this->form_validation->set_rules('PRENOM', 'Prenom', 'required');
 
-		$this->form_validation->set_rules('USERNAME', 'Username', 'required|callback_check_username_unique');
+		$this->form_validation->set_rules('ID_TYPE_MATIERE', 'Type', 'required');
 
-		$this->form_validation->set_rules('PASSWORD', 'Mot de passe', 'required');
+		$this->form_validation->set_rules('NUMERO_COLIS', 'Numero', 'required');
 
-		$this->form_validation->set_rules('PROFIL_ID', 'Profil', 'required');
+		$this->form_validation->set_rules('LONGEUR', 'Longeur', 'required|callback_check_username_unique');
 
-		$this->form_validation->set_rules('ID_AGENCE', 'Agence', 'required');
+		$this->form_validation->set_rules('COULEUR', 'Couleur', 'required');
+
+		$this->form_validation->set_rules('QUANTITE_COMMANDE', 'Quantite Commander', 'required');
+
+		$this->form_validation->set_rules('QUANTITE_RECUE', 'Quantite recue', 'required');
+
+		$this->form_validation->set_rules('ID_FOURNISSEUR', 'Fourisseur', 'required');
+
+		$this->form_validation->set_rules('ID_USER', 'Utilisateur', 'required');
+
+		$this->form_validation->set_rules('DATE_ENTREE', 'Date entree', 'required');
+
+
+
 
 
 
@@ -175,7 +190,7 @@ class Stock_Entree extends MY_Controller {
 
 			$message = "<div class='alert alert-danger'>
 
-			Utilisateur non enregistr&eacute; de cong&eacute; non enregistr&eacute;
+			Op&eacute;ration  non r&eacute;ussi !
 
 			<button type='button' class='close' data-dismiss='alert'>&times;</button>
 
@@ -183,37 +198,107 @@ class Stock_Entree extends MY_Controller {
 
 			$this->session->set_flashdata(array('message'=>$message));
 
-			$data['title']='Utilisateur';
+		$data['title']='STOCK MATIERES PREMIERES';
 
-			$data['profil']=$this->Model->getRequete('SELECT * FROM `config_profil` order by DESCRIPTION');
+		$data['type_mat']=$this->Model->getRequete('SELECT * FROM `type_matieres` order by DESCRIPTION');
 
-			$data['agence']=$this->Model->getRequete('SELECT * FROM `masque_agence_msi` order by DESCRIPTION');
+		$data['fournisseurs']=$this->Model->getRequete('SELECT * FROM `fournisseurs` order by NOM_FOURNISSEUR');
 
-			$this->load->view('User_Add_View',$data);
+		$data['users']=$this->Model->getRequete('SELECT * FROM `admin_user` order by NOM');
+
+		$this->load->view('Stock_Entree_Add_View',$data);
 
 		}else{
 
+				$ID_TYPE_MATIERE=$this->input->post('ID_TYPE_MATIERE');
+
+		$NUMERO_COLIS=$this->input->post('NUMERO_COLIS');
+
+		$LONGEUR=$this->input->post('LONGEUR');
+
+		$COULEUR=$this->input->post('COULEUR');
+
+		$QUANTITE_COMMANDE1=$this->input->post('QUANTITE_COMMANDE');
+
+		$QUANTITE_RECUE1=$this->input->post('QUANTITE_RECUE');
+		$ID_FOURNISSEUR=$this->input->post('ID_FOURNISSEUR');
+		$ID_USER=$this->input->post('ID_USER');
+		$DATE_ENTREE=$this->input->post('DATE_ENTREE');
+
+
+		$quant=$this->Model->getRequeteOne('SELECT ID_STOCK_MATIERE,QUANTITE_RECUE,QUANTITE_COMMANDE FROM `stock_matieres_premieres` where ID_TYPE_MATIERE='.$ID_TYPE_MATIERE.'');
+
+
+		if (!empty($quant)) {
+		$QUANTITE_COMMANDE=$this->input->post('QUANTITE_COMMANDE')+$quant['QUANTITE_COMMANDE'];
+
+		$QUANTITE_RECUE=$this->input->post('QUANTITE_RECUE')+$quant['QUANTITE_RECUE'];
+		}
+		else{
+    $QUANTITE_COMMANDE=$this->input->post('QUANTITE_COMMANDE');
+
+		$QUANTITE_RECUE=$this->input->post('QUANTITE_RECUE');
+
+		}
+
+
 			$datasuser=array(
 
-				'NOM'=>$NOM,
+				'ID_TYPE_MATIERE'=>$ID_TYPE_MATIERE,
+				'LONGEUR'=>$LONGEUR,
+				'QUANTITE_COMMANDE'=>$QUANTITE_COMMANDE,
+        'QUANTITE_RECUE'=>$QUANTITE_RECUE,
+				'ID_FOURNISSEUR'=>$ID_FOURNISSEUR,
+				'ID_USER'=>$ID_USER,
+				'DATE_ENTREE'=>$DATE_ENTREE,
+        );
 
-				'PRENOM'=>$PRENOM,
+			if (empty($quant)) {
+			$val=$this->Model->insert_last_id('stock_matieres_premieres',$datasuser); 
+			$ID_STOCK_MATIERE=$val;
+			}
+			else{
+			$datasuser=array(
 
-				'USERNAME'=>$USERNAME,
+				
+				'QUANTITE_COMMANDE'=>$QUANTITE_COMMANDE,
 
-				'PASSWORD'=>md5($PASSWORD),
+        'QUANTITE_RECUE'=>$QUANTITE_RECUE,
 
-				'PROFIL_ID'=>$PROFIL_ID,
+        );
+			$this->Model->update('stock_matieres_premieres',array('ID_TYPE_MATIERE'=>$quant['ID_TYPE_MATIERE']),$datasuser);	
+			$ID_STOCK_MATIERE=$quant['ID_STOCK_MATIERE'];
+			}
 
-				'ID_AGENCE'=>$ID_AGENCE,
+	
 
-			);
+			$datasuser2=array(
 
-			$this->Model->insert_last_id('admin_user',$datasuser);  
+				'ID_STOCK_MATIERE'=>$ID_STOCK_MATIERE,
+       
+				'ID_TYPE_MATIERE'=>$ID_TYPE_MATIERE,
+
+				'NUMERO_COLIS'=>$NUMERO_COLIS,
+
+				'LONGEUR'=>$LONGEUR,
+
+				'QUANTITE_COMMANDE'=>$QUANTITE_COMMANDE,
+
+        'QUANTITE_RECUE'=>$QUANTITE_RECUE,
+
+				'ID_FOURNISSEUR'=>$ID_FOURNISSEUR,
+				'ID_USER'=>$ID_USER,
+				'DATE_ENTREE'=>$DATE_ENTREE,
+				'ACTION'=>'ENTREE DANS LE STOCK',
+
+
+        );
+
+			$this->Model->create('stock_matieres_premieres',$datasuser);  
 
 			$message = "<div class='alert alert-success' id='message'>
 
-			Utilisateur enregistr&eacute; avec succés
+			Opération avec succés
 
 			<button type='button' class='close' data-dismiss='alert'>&times;</button>
 
@@ -221,11 +306,114 @@ class Stock_Entree extends MY_Controller {
 
 			$this->session->set_flashdata(array('message'=>$message));
 
-			redirect(base_url('administration/User'));  
+			redirect(base_url('first_materials/Stock_Entree/list'));  
 
 		}
 
 	}
+
+public function liste()
+{
+$data['title']='Contenu du stock des matieres premieres';
+$this->load->view('Stock_Entree_List_View',$data);
+
+
+}
+
+public function list()
+{
+	$query_principal ="SELECT `ID_STOCK_MATIERE`, admin_user.NOM,admin_user.PRENOM,fournisseurs.NOM_FOURNISSEUR,type_matieres.DESCRIPTION, `NUMERO_COLIS`, `LONGEUR`, `COULEUR`, `QUANTITE_COMMANDE`,QUANTITE_RECUE,`DATE_ENTREE` FROM `stock_matieres_premieres` left JOIN fournisseurs ON stock_matieres_premieres.`ID_STOCK_MATIERE` = fournisseurs.`ID_FOURNISSEUR` left JOIN type_matieres ON stock_matieres_premieres.`ID_TYPE_MATIERE` = type_matieres.ID_TYPE_MATIERE left join admin_user on stock_matieres_premieres.`ID_USER`=admin_user.ID_USER";
+
+		$var_search = !empty($_POST['search']['value']) ? $this->db->escape_like_str($_POST['search']['value']) : null;
+
+		$limit = 'LIMIT 0,10';
+
+		if (isset($_POST['length']) && $_POST['length'] != -1) {
+			$limit = 'LIMIT ' . (isset($_POST["start"]) ? $_POST["start"] : 0) . ',' . $_POST["length"];
+		}
+
+		$order_by = '';
+
+		$order_column = array('ID_STOCK_MATIERE', 'NOM','PRENOM');
+
+		$order_by = isset($_POST['order']) ? ' ORDER BY ' . $order_column[$_POST['order']['0']['column']] . '  ' . $_POST['order']['0']['dir'] : ' ORDER BY admin_user.ID_USER ASC';
+
+		$search = !empty($_POST['search']['value']) ?
+		"AND NOM LIKE '%$var_search%' OR PRENOM LIKE '%$var_search%' OR NOM_FOURNISSEUR LIKE '%$var_search%' OR QUANTITE_COMMANDE LIKE '%$var_search%' OR QUANTITE_RECUE LIKE '%$var_search%' "
+		: '';
+
+		$critaire = '';
+
+		$query_secondaire = $query_principal . ' ' . $critaire . ' ' . $search . ' ' . $order_by . '   ' . $limit;
+		$query_filter = $query_principal . ' ' . $critaire . ' ' . $search;
+
+		$resultat = $this->Model->datatable($query_secondaire);
+
+		
+
+		$data = array();
+		foreach ($resultat as $key) {
+			$row = array();
+ 
+
+			$row[] = $key->NOM." ".$key->PRENOM;
+			$row[] = $key->NOM_FOURNISSEUR;
+			$row[] = $key->DESCRIPTION;
+			$row[] = $key->NUMERO_COLIS;
+			$row[] = $key->QUANTITE_COMMANDE;
+			$row[] = $key->QUANTITE_RECUE;
+			$row[] = $key->DATE_ENTREE;
+
+			$row[] = '
+			<div class="modal fade" id="desactcat'.$key->ID_STOCK_MATIERE.'" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+			<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+			<div class="modal-header">
+			<h4 class="modal-title" id="myModalLabel">test</h4>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+			</div>
+			<div class="modal-body">
+			<h6>test</h6>
+			</div>
+			<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+			<a href="'.base_url("administration/User/".$key->ID_STOCK_MATIERE).'" class="btn btn-danger">test</a>
+			</div>
+			</div>
+			</div>
+			</div>
+
+			<div class="btn-group">
+			<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+			<i class="fa fa-cogs"></i> Actions <i class="fa fa-angle-down"></i>
+			</button>
+			<div class="dropdown-menu">
+			<a class="dropdown-item" href="'.base_url("administration/User/index_update/".$key->ID_STOCK_MATIERE).'">
+			<i class="fa fa-edit"></i> Modifier
+			</a>
+			<a class="dropdown-item" href="#" data-toggle="modal" data-target="#desactcat'.$key->ID_STOCK_MATIERE.'">test </a> 
+			</div>
+			</div>';
+
+
+
+			
+			$data[] = $row;
+		}
+     
+		$output = array(
+			"draw" => intval($_POST['draw']),
+			"recordsTotal" => $this->Model->all_data($query_principal),
+			"recordsFiltered" => $this->Model->filtrer($query_filter),
+			"data" => $data
+		);
+
+		echo json_encode($output);
+
+}
+
 
 public function check_username_unique()
 {

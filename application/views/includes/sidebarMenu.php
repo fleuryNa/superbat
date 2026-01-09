@@ -40,7 +40,7 @@
                                 <a href="<?= base_url()?>stock_matieres/Type_matieres">Type Matieres</a>
                             </li>
                             <li>
-                                <a href="<?= base_url()?>stock_matieres/Stock_matieres">Stock matieres</a>
+                                <a href="<?= base_url()?>stock_matieres/Stock_Matieres_New">Stock matieres</a>
                             </li>
                             
                         </ul>
@@ -51,7 +51,7 @@
                         <span class="nav-label">Matieres pemieres </span><i class="fa fa-angle-left arrow"></i></a>
                         <ul class="nav-2-level collapse">
                             <li>
-                                <a href="<?= base_url()?>stock_matieres/Stock_matieres/liste_reception"> Reception</a>
+                                <a href="<?= base_url()?>stock_matieres/Stock_Matieres_New/liste_reception"> Reception</a>
                             </li>
                             <li>
                                 <a href="<?= base_url()?>stock_matieres/Commande_production">Commande production</a>

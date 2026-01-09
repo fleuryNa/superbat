@@ -30,7 +30,7 @@
       <div class="page-content fade-in-up">
         <div class="ibox">
           <div class="ibox-body">
-            <form id="FormData" action="<?php echo base_url()?>Stock_Entree/save" method="POST" enctype="multipart/form-data">
+            <form id="FormData" action="<?php echo base_url()?>first_materials/Stock_Entree/save" method="POST" enctype="multipart/form-data">
               
               <!-- Tabs Navigation -->
               <ul class="nav nav-tabs tabs-line">
@@ -170,6 +170,10 @@
                           <option value="">Sélectionnez un fournisseur</option>
                           <?php
                     foreach ($fournisseurs as $fourn) {
+
+                      $val='';
+
+
                      echo"<option value='".$fourn['ID_FOURNISSEUR']."'>".$fourn['NOM_FOURNISSEUR']."</option>";
                    }
                    ?>

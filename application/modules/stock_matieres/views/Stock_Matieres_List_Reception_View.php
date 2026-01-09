@@ -40,7 +40,7 @@
 
                 <div class="tab-content">
                   <div class="tab-pane fade show active" id="tab-1-1"> 
-                    <form action="<?= base_url('stock_matieres/Stock_matieres/traitement'); ?>" method="POST">
+                    <form action="<?= base_url('stock_matieres/Stock_Matieres_New/traitement'); ?>" method="POST">
 
                         <table class="table table-striped table-bordered table-hover table-modern" id="mytable" width="100%">
                             <thead>
@@ -232,7 +232,7 @@
     liste_livre();
 });
  function liste_livre() {
-    var url = "<?= base_url() ?>stock_matieres/Stock_matieres/listing_reception";
+    var url = "<?= base_url() ?>stock_matieres/Stock_Matieres_New/listing_reception";
     var row_count = "1000000";
     table = $("#mytable3").DataTable({
       "processing": true,
@@ -288,7 +288,7 @@
     // Attendre que le modal soit visible
     $('#modalColonnes').on('shown.bs.modal', function () {
 
-      var url = "<?= base_url() ?>stock_matieres/Stock_matieres/get_details";
+      var url = "<?= base_url() ?>stock_matieres/Stock_Matieres_New/get_details";
       var row_count = 1000000;
 
       if ($.fn.DataTable.isDataTable('#mytable_histo')) {
