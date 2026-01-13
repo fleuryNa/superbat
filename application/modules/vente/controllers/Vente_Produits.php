@@ -16,6 +16,8 @@ class Vente_Produits extends MY_Controller {
 		{
 			redirect(base_url('Login/'));
 		}
+
+		print_r($this->session->userdata('SUPERBAT_ID_USER'));die();
 	}
 
 	function index($value='')
