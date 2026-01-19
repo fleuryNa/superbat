@@ -35,32 +35,56 @@
           include 'includes/menu_founisseur.php';
           ?>
           <div class="ibox-body">
+
+            <div id="alertBox">
+              <?php if ($this->session->flashdata('success')): ?>
+                <div class="alert alert-success alert-dismissible fade show text-center">
+                  <i class="fa fa-check-circle"></i>
+                  <?= $this->session->flashdata('success'); ?>
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>
+              <?php endif; ?>
+
+              <?php if ($this->session->flashdata('error')): ?>
+                <div class="alert alert-danger alert-dismissible fade show text-center">
+                  <i class="fa fa-exclamation-triangle"></i>
+                  <?= $this->session->flashdata('error'); ?>
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>
+              <?php endif; ?>
+            </div>
             <form id="FormData" action="<?php echo base_url()?>stock_matieres/Type_matieres/update" method="POST" enctype="multipart/form-data">
               <div class="row">
-                 <input class="form-control" type="hidden" id="ID_TYPE_MATIERE" name="ID_TYPE_MATIERE"  value="<?=$data['ID_TYPE_MATIERE']?>">
-                <div class="col-sm-6 form-group">
-                  <label>Description <span class="text-danger">*</span></label>
-                  <input class="form-control" type="text" id="DESCRIPTION" name="DESCRIPTION" placeholder="Description" value="<?=set_value('DESCRIPTION',$data['DESCRIPTION'])?>">
-                  <?php echo form_error('DESCRIPTION', '<div class="text-danger">', '</div>'); ?>
-                </div>
-                  <div class="col-sm-6 form-group">
-                  <label>Caracterisitique <span class="text-danger">*</span></label>
-                  <input class="form-control" type="text" class="form-control" id="CARACTERISTIQUE" name="CARACTERISTIQUE" placeholder="caracteristique" value="<?=set_value('CARACTERISTIQUE',$data['CARACTERISTIQUE'])?>">
-                  <?php echo form_error('CARACTERISTIQUE', '<div class="text-danger">', '</div>'); ?>
-                </div>
-           </div>
+               <input class="form-control" type="hidden" id="ID_TYPE_MATIERE" name="ID_TYPE_MATIERE"  value="<?=$data['ID_TYPE_MATIERE']?>">
+               <div class="col-sm-12 form-group">
+                <label>Description <span class="text-danger">*</span></label>
+                <input class="form-control" type="text" id="DESCRIPTION" name="DESCRIPTION" placeholder="Description" value="<?=set_value('DESCRIPTION',$data['DESCRIPTION'])?>">
+                <?php echo form_error('DESCRIPTION', '<div class="text-danger">', '</div>'); ?>
+              </div>
+              <div class="col-sm-6 form-group">
+                <label>Unite de mesure <span class="text-danger">*</span></label>
+                <input class="form-control" type="text" class="form-control" id="UNITE" name="UNITE" placeholder="Unite de mesure " value="<?=set_value('UNITE',$data['UNITE'])?>">
+                <?php echo form_error('UNITE', '<div class="text-danger">', '</div>'); ?>
+              </div>
 
-           <div class="form-group">
-            <button class="btn btn-success btn-block" type="submit">Submit</button>
-          </div>
-        </form>
+              <div class="col-sm-6 form-group">
+                <label>Abbreviation </label>
+                <input class="form-control" type="text" class="form-control" id="TYPE_ABREV" name="TYPE_ABREV" placeholder="Abbreviation" value="<?=set_value('TYPE_ABREV',$data['TYPE_ABREV'])?>">
+                <?php echo form_error('TYPE_ABREV', '<div class="text-danger">', '</div>'); ?>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <button class="btn btn-success btn-block" type="submit">Submit</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
-  <!-- END PAGE CONTENT -->
+    <!-- END PAGE CONTENT -->
 
-  <?php include VIEWPATH.'includes/footer.php'; ?>
-</div>
+    <?php include VIEWPATH.'includes/footer.php'; ?>
+  </div>
 </div>
 
 <!-- SETTINGS / BACKDROPS -->
@@ -89,6 +113,16 @@
       icon.classList.add('fa-eye');
     }
   });
+</script>
+
+
+<script>
+  $(document).ready(function () {
+    setTimeout(function () {
+      $('.alert').fadeOut('slow');
+    }, 4000);
+  });
+
 </script>
 </body>
 </html>

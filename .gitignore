@@ -49,3 +49,4 @@ uploads/
 assets/uploads/
 
 application/libraries/*.zip
+application/vendor

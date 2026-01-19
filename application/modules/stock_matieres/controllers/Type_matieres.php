@@ -14,7 +14,7 @@ class Type_matieres extends MY_Controller {
 	public function listing()
 	{
 
-		$query_principal ="SELECT `ID_TYPE_MATIERE`, `DESCRIPTION`, `CARACTERISTIQUE`, `IS_ACTIF` FROM `type_matieres` WHERE 1 " ;
+		$query_principal ="SELECT `ID_TYPE_MATIERE`, `DESCRIPTION`, `UNITE`, `TYPE_ABREV`, `IS_ACTIF` FROM `type_matieres` WHERE 1 " ;
 
 		$var_search = !empty($_POST['search']['value']) ? $this->db->escape_like_str($_POST['search']['value']) : null;
 
@@ -26,12 +26,12 @@ class Type_matieres extends MY_Controller {
 
 		$order_by = '';
 
-		$order_column = array('DESCRIPTION', 'CARACTERISTIQUE');
+		$order_column = array('DESCRIPTION', 'UNITE' , 'TYPE_ABREV');
 
 		$order_by = isset($_POST['order']) ? ' ORDER BY ' . $order_column[$_POST['order']['0']['column']] . '  ' . $_POST['order']['0']['dir'] : ' ORDER BY ID_TYPE_MATIERE ASC';
 
 		$search = !empty($_POST['search']['value']) ?
-		"AND DESCRIPTION LIKE '%$var_search%' OR CARACTERISTIQUE LIKE '%$var_search%' "
+		"AND DESCRIPTION LIKE '%$var_search%' OR UNITE LIKE '%$var_search%' OR TYPE_ABREV LIKE '%$var_search%'"
 		: '';
 
 		$critaire = '';
@@ -46,8 +46,8 @@ class Type_matieres extends MY_Controller {
 			$row = array();
 
 			$row[] = $key->DESCRIPTION;
-			$row[] = $key->CARACTERISTIQUE;
-			// $row[] = $key->IS_ACTIF ? "Actif" : "Inactif";
+			$row[] = $key->UNITE;
+			$row[] = $key->TYPE_ABREV;
 			
 			$row[] = '
 			<div class="modal fade" id="rendreeff'.$key->ID_TYPE_MATIERE.'" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
@@ -119,61 +119,43 @@ class Type_matieres extends MY_Controller {
 
 	public function add()
 	{
+		$DESCRIPTION = $this->input->post('DESCRIPTION');
+		$UNITE = $this->input->post('UNITE');
+		$TYPE_ABREV = $this->input->post('TYPE_ABREV');
 
-		$DESCRIPTION=$this->input->post('DESCRIPTION');
-		$CARACTERISTIQUE=$this->input->post('CARACTERISTIQUE');
-		
+		$this->form_validation->set_rules('DESCRIPTION', 'Description', 'required');
+		$this->form_validation->set_rules('UNITE', 'Unité de mesure', 'required');
 
-		$this->form_validation->set_rules('DESCRIPTION', 'Nom du Profil', 'required');
-		$this->form_validation->set_rules('CARACTERISTIQUE', 'Nom du Profil', 'required');
+		if ($this->form_validation->run() == FALSE) {
 
-
-
-		if ($this->form_validation->run() == FALSE){
-
-			$message = "<div class='alert alert-danger'>
-
-			Type de matieres non enregistr&eacute; de cong&eacute; non enregistr&eacute;
-
-			<button type='button' class='close' data-dismiss='alert'>&times;</button>
-
-			</div>";
-
-			$this->session->set_flashdata(array('message'=>$message));
-
-			$data['title']='Ajouter type de matieres';
-
-			$this->load->view('Type_Matieres_Add_View',$data);
-		}else{
-
-			$datasprofil=array(
-				'DESCRIPTION'=>$DESCRIPTION,
-				'CARACTERISTIQUE'=>$CARACTERISTIQUE,
-				'IS_ACTIF'=>1
-				
+        // Message d'erreur clair
+			$this->session->set_flashdata('error', 
+				"Le type de matière n'a pas été enregistré. Veuillez vérifier les champs."
 			);
 
-			$FOURNISSEUR_ID = $this->Model->insert_last_id('type_matieres',$datasprofil);
+			$data['title'] = 'Ajouter type de matières';
+			$this->load->view('Type_Matieres_Add_View', $data);
 
-			
+		} else {
 
+			$datasprofil = array(
+				'DESCRIPTION' => $DESCRIPTION,
+				'UNITE' => $UNITE,
+				'TYPE_ABREV' => $TYPE_ABREV,
+				'IS_ACTIF' => 1
+			);
+
+			$this->Model->insert_last_id('type_matieres', $datasprofil);
+
+        // Message succès clair
+			$this->session->set_flashdata('success', 
+				"Le type de matière a été enregistré avec succès."
+			);
+
+			redirect(base_url('stock_matieres/Type_matieres'));
 		}
-
-
-
-		$message = "<div class='alert alert-success' id='message'>
-
-		Type de matieres enregistr&eacute; avec succés
-
-		<button type='button' class='close' data-dismiss='alert'>&times;</button>
-
-		</div>";
-
-		$this->session->set_flashdata(array('message'=>$message));
-
-		redirect(base_url('stock_matieres/Type_matieres'));  
-
 	}
+
 
 
 
@@ -193,75 +175,74 @@ class Type_matieres extends MY_Controller {
 
 	public function update()
 	{
-		$DESCRIPTION=$this->input->post('DESCRIPTION');
-		$CARACTERISTIQUE=$this->input->post('CARACTERISTIQUE');
+		$DESCRIPTION = $this->input->post('DESCRIPTION');
+		$UNITE = $this->input->post('UNITE');
+		$TYPE_ABREV = $this->input->post('TYPE_ABREV');
+		$ID_TYPE_MATIERE = $this->input->post('ID_TYPE_MATIERE');
 
+		$this->form_validation->set_rules('DESCRIPTION', 'Description', 'required');
+		$this->form_validation->set_rules('UNITE', 'Unité de mesure', 'required');
 
-		$ID_TYPE_MATIERE=$this->input->post('ID_TYPE_MATIERE');
+		if ($this->form_validation->run() == FALSE) {
 
-		$this->form_validation->set_rules('DESCRIPTION', 'Nom du Profil', 'required');
-		$this->form_validation->set_rules('CARACTERISTIQUE', 'Nom du Profil', 'required');
-
-
-
-
-		if ($this->form_validation->run() == FALSE){
-
-			$message = "<div class='alert alert-danger'>
-
-			Profil est droit non modifi&eacute; de cong&eacute; non enregistr&eacute;
-
-			<button type='button' class='close' data-dismiss='alert'>&times;</button>
-
-			</div>";
-
-			$this->session->set_flashdata(array('message'=>$message));
-
-			$data['title']='Modifier type de matiere';
-
-			$this->load->view('Fournisseur_Update_View',$data);
-
-		}
-		else{
-			$datasprofil=array(
-				'DESCRIPTION'=>$DESCRIPTION,
-				'CARACTERISTIQUE'=>$CARACTERISTIQUE
+        // 🔴 Message erreur
+			$this->session->set_flashdata(
+				'error',
+				"Impossible de modifier le type de matière. Veuillez vérifier les informations saisies."
 			);
 
-			$this->Model->update('type_matieres',array('ID_TYPE_MATIERE'=>$ID_TYPE_MATIERE),$datasprofil);
+			redirect(base_url('stock_matieres/Type_matieres/'.$ID_TYPE_MATIERE));
+			return;
 		}
 
-		$message = "<div class='alert alert-success' id='message'>
+    // Mise à jour
+		$datasprofil = array(
+			'DESCRIPTION' => $DESCRIPTION,
+			'UNITE'       => $UNITE,
+			'TYPE_ABREV'  => $TYPE_ABREV,
+		);
 
-		Profil & Droit Modifi&eacute; avec succés
+		$this->Model->update(
+			'type_matieres',
+			array('ID_TYPE_MATIERE' => $ID_TYPE_MATIERE),
+			$datasprofil
+		);
 
-		<button type='button' class='close' data-dismiss='alert'>&times;</button>
+    // 🟢 Message succès
+		$this->session->set_flashdata(
+			'success',
+			"Type de matière mis à jour avec succès."
+		);
 
-		</div>";
-
-		$this->session->set_flashdata(array('message'=>$message));
-
-		redirect(base_url('stock_matieres/Type_matieres'));  
-
+		redirect(base_url('stock_matieres/Type_matieres'));
 	}
+
 
 	public function effacer($id)
 	{
-		
+    // Vérifier si l'enregistrement existe (optionnel mais propre)
+		$exists = $this->Model->getOne('type_matieres', array('ID_TYPE_MATIERE' => $id));
 
-		$this->Model->delete('type_matieres',array('ID_TYPE_MATIERE'=>$id));
-		$message = "<div class='alert alert-success' id='message'>
+		if (!$exists) {
+			$this->session->set_flashdata(
+				'error',
+				"Type de matière introuvable ou déjà supprimé."
+			);
+			redirect(base_url('stock_matieres/Type_matieres'));
+			return;
+		}
 
-		Profil & Droit Modifi&eacute; avec succés
+    // Suppression
+		$this->Model->delete('type_matieres', array('ID_TYPE_MATIERE' => $id));
 
-		<button type='button' class='close' data-dismiss='alert'>&times;</button>
+		$this->session->set_flashdata(
+			'success',
+			"Type de matière supprimé avec succès."
+		);
 
-		</div>";
-
-		$this->session->set_flashdata(array('message'=>$message));
-		redirect(base_url('stock_matieres/Type_matieres'));  
-
+		redirect(base_url('stock_matieres/Type_matieres'));
 	}
+
 
 
 

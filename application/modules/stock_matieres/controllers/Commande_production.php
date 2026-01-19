@@ -22,7 +22,7 @@ class Commande_production extends MY_Controller {
 	public function index()
 	{
 		$data['title']='Liste de Stock matieres premieres';
-		$commandes = $this->Model->getRequete("SELECT `ID_COMANDE_PROD`, smp.NUMERO_COLIS, `QUANTITE_TONNE`, cpmp.ID_USER_DEMANDEUR,user_demandeur.NOM,user_demandeur.PRENOM, `ID_USER_DONNEUR`, cpmp.ID_TYPE_MATIERE,type_matieres.DESCRIPTION,type_matieres.CARACTERISTIQUE, `DATE_INSERTION`,scm.DESCRIPTION_CO_MP FROM `commande_production_matieres_premiers` AS cpmp JOIN type_matieres ON type_matieres.ID_TYPE_MATIERE=cpmp.`ID_TYPE_MATIERE` JOIN admin_user AS user_demandeur ON user_demandeur.ID_USER=cpmp.`ID_USER_DEMANDEUR`  JOIN stock_matieres_premieres AS smp ON smp.ID_TYPE_MATIERE=cpmp.`ID_TYPE_MATIERE` JOIN statut_commande_matieres AS scm ON cpmp.ID_STATUT_CO_MP=scm.ID_STATUT_CO_MP WHERE cpmp.ID_STATUT_CO_MP=1");
+		$commandes = $this->Model->getRequete("SELECT `ID_COMANDE_PROD`, smp.NBRE_COIlS, `QUANTITE_TONNE`, cpmp.ID_USER_DEMANDEUR,user_demandeur.NOM,user_demandeur.PRENOM, `ID_USER_DONNEUR`, cpmp.ID_TYPE_MATIERE,type_matieres.DESCRIPTION,type_matieres.UNITE, `DATE_INSERTION`,scm.DESCRIPTION_CO_MP FROM `commande_production_matieres_premiers` AS cpmp JOIN type_matieres ON type_matieres.ID_TYPE_MATIERE=cpmp.`ID_TYPE_MATIERE` JOIN admin_user AS user_demandeur ON user_demandeur.ID_USER=cpmp.`ID_USER_DEMANDEUR`  JOIN stock_matieres_premieres AS smp ON smp.ID_TYPE_MATIERE=cpmp.`ID_TYPE_MATIERE` JOIN statut_commande_matieres AS scm ON cpmp.ID_STATUT_CO_MP=scm.ID_STATUT_CO_MP WHERE cpmp.ID_STATUT_CO_MP=1");
 		$data['commandes'] = $commandes;
 		$this->load->view('Commande_List_View',$data);
 	}
@@ -65,7 +65,7 @@ class Commande_production extends MY_Controller {
 				$datahisto=array(
 					'ID_TYPE_MATIERE'=>$donne_matiere['ID_TYPE_MATIERE'],
 					'ID_STOCK_MATIERE'=>$donne_matiere['ID_STOCK_MATIERE'],
-					'NUMERO_COLIS'=>$donne_matiere['NUMERO_COLIS'],
+					'NBRE_COIlS'=>$donne_matiere['NBRE_COIlS'],
 					'LONGEUR'=>$donne_matiere['LONGEUR'],
 					'COULEUR'=>$donne_matiere['COULEUR'],
 					'QUANTITE_COMMANDE'=>$donne_matiere['QUANTITE_COMMANDE'],
@@ -111,7 +111,7 @@ class Commande_production extends MY_Controller {
 	public function listing_livrer()
 	{
 
-		$query_principal ="SELECT `ID_COMANDE_PROD`, smp.NUMERO_COLIS, SUM(`QUANTITE_TONNE`) AS, cpmp.ID_USER_DEMANDEUR,QUANTITE_CONSOME,user_demandeur.NOM,user_demandeur.PRENOM, `ID_USER_DONNEUR`, cpmp.ID_TYPE_MATIERE,type_matieres.DESCRIPTION,type_matieres.CARACTERISTIQUE, `DATE_INSERTION`,scm.DESCRIPTION_CO_MP,cpmp.ID_STATUT_CO_MP FROM `commande_production_matieres_premiers` AS cpmp JOIN type_matieres ON type_matieres.ID_TYPE_MATIERE=cpmp.`ID_TYPE_MATIERE` JOIN admin_user AS user_demandeur ON user_demandeur.ID_USER=cpmp.`ID_USER_DEMANDEUR`  JOIN stock_matieres_premieres AS smp ON smp.ID_TYPE_MATIERE=cpmp.`ID_TYPE_MATIERE` JOIN statut_commande_matieres AS scm ON cpmp.ID_STATUT_CO_MP=scm.ID_STATUT_CO_MP WHERE cpmp.ID_STATUT_CO_MP!=1" ;
+		$query_principal ="SELECT `ID_COMANDE_PROD`, smp.NBRE_COIlS, SUM(`QUANTITE_TONNE`) AS QUANTITE_TONNE, cpmp.ID_USER_DEMANDEUR,QUANTITE_CONSOME,user_demandeur.NOM,user_demandeur.PRENOM, `ID_USER_DONNEUR`, cpmp.ID_TYPE_MATIERE,type_matieres.DESCRIPTION,type_matieres.UNITE, `DATE_INSERTION`,scm.DESCRIPTION_CO_MP,cpmp.ID_STATUT_CO_MP FROM `commande_production_matieres_premiers` AS cpmp JOIN type_matieres ON type_matieres.ID_TYPE_MATIERE=cpmp.`ID_TYPE_MATIERE` JOIN admin_user AS user_demandeur ON user_demandeur.ID_USER=cpmp.`ID_USER_DEMANDEUR`  JOIN stock_matieres_premieres AS smp ON smp.ID_TYPE_MATIERE=cpmp.`ID_TYPE_MATIERE` JOIN statut_commande_matieres AS scm ON cpmp.ID_STATUT_CO_MP=scm.ID_STATUT_CO_MP WHERE cpmp.ID_STATUT_CO_MP!=1" ;
 
 		$var_search = !empty($_POST['search']['value']) ? $this->db->escape_like_str($_POST['search']['value']) : null;
 
@@ -143,8 +143,8 @@ class Commande_production extends MY_Controller {
 			$row = array();
 
 			$row[] = $key->NOM .' '.$key->PRENOM;
-			$row[] = $key->DESCRIPTION.'('.$key->CARACTERISTIQUE.')';
-			$row[] = $key->NUMERO_COLIS;
+			$row[] = $key->DESCRIPTION.'('.$key->UNITE.')';
+			$row[] = $key->NBRE_COIlS;
 			$row[] = $key->QUANTITE_TONNE;
 			$row[] = $key->DESCRIPTION_CO_MP;		
 			$row[] = date("d/m/Y", strtotime($key->DATE_INSERTION));

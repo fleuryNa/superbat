@@ -36,13 +36,24 @@
           ?>
           <div class="ibox-body">
 
+            <div id="alertBox">
+              <?php if ($this->session->flashdata('success')): ?>
+                <div class="alert alert-success alert-dismissible fade show text-center">
+                  <i class="fa fa-check-circle"></i>
+                  <?= $this->session->flashdata('success'); ?>
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>
+              <?php endif; ?>
 
-           <?php
-           if(!empty($this->session->flashdata('message')))
-             echo $this->session->flashdata('message');
-
-           ?>
-
+              <?php if ($this->session->flashdata('error')): ?>
+                <div class="alert alert-danger alert-dismissible fade show text-center">
+                  <i class="fa fa-exclamation-triangle"></i>
+                  <?= $this->session->flashdata('error'); ?>
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>
+              <?php endif; ?>
+            </div>
+ 
 
             <ul class="nav nav-tabs">
                       <li class="nav-item">
@@ -132,11 +143,58 @@
                 <th>Utilisateur</th>
                 <th>Fournisseur</th>
                 <th>Type matière</th>
-              
+                
                 <th>Qté</th>
                 <th>Motif</th>
                 <th>Statut</th>
-                 <th>Options</th>
+                <th>Options</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="9" class="text-center text-muted">
+                  Aperçu des colonnes (pas de données)
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalpacking" tabindex="-1" role="dialog" aria-labelledby="modalpackingLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document" style="max-width: 70%;">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalpackingLabel">Détails des informations</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped" id="mytable_pack">
+            <thead class="thead-light">
+              <tr>
+                <th>Date d'entrée</th>
+                <th>Type matière</th>
+                <th>Size</th>
+                <th>Coils number</th>
+                <th>Couleur</th>
+                <th>Longueur</th>
+                <th>Poids net</th>
+                <th>Poids brut</th>
               </tr>
             </thead>
             <tbody>
@@ -257,6 +315,58 @@
 
 
       $('#mytable_histo').DataTable({
+        processing: true,
+        destroy: true,
+        serverSide: true,
+        order: [[0, 'desc']],
+        ajax: {
+          url: url,
+          type: "POST",
+          data: { id: id }
+        },
+        lengthMenu: [[5, 10, 50, 100, row_count], [5, 10, 50, 100, "All"]],
+        pageLength: 10,
+        dom: 'Bfrtlip',
+        buttons: ['copy', 'excel', 'pdf'],
+        language: {
+          sProcessing: "Traitement en cours...",
+          sSearch: "Rechercher :",
+          sLengthMenu: "Afficher _MENU_ éléments",
+          sInfo: "Affichage de _START_ à _END_ sur _TOTAL_ éléments",
+          sInfoEmpty: "Aucun élément",
+          sZeroRecords: "Aucun résultat",
+          sEmptyTable: "Aucune donnée disponible",
+          oPaginate: {
+            sFirst: "Premier",
+            sPrevious: "Précédent",
+            sNext: "Suivant",
+            sLast: "Dernier"
+          }
+        }
+      });
+
+    });
+  }
+</script>
+
+<script>
+  function get_packing(id) {
+      // alert(id)
+    // Ouvrir le modal Bootstrap
+    $('#modalpacking').modal('show');
+
+    // Attendre que le modal soit visible
+    $('#modalpacking').on('shown.bs.modal', function () {
+
+      var url = "<?= base_url() ?>stock_matieres/Stock_Matieres_New/get_packing";
+      var row_count = 1000000;
+
+      if ($.fn.DataTable.isDataTable('#mytable_histo')) {
+        $('#mytable_pack').DataTable().clear().destroy();
+      }
+
+
+      $('#mytable_pack').DataTable({
         processing: true,
         destroy: true,
         serverSide: true,
