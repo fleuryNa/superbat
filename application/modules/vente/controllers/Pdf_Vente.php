@@ -27,6 +27,7 @@ class Pdf_Vente extends MY_Controller {
 
 
 
+
         $this->generate_with_helper();
     }
 

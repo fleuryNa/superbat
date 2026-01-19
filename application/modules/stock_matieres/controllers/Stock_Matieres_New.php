@@ -29,7 +29,7 @@ class Stock_Matieres_New extends MY_Controller {
 	public function listing()
 	{
 
-		$query_principal ="SELECT `ID_STOCK_MATIERE`, stock_matieres_premieres.`ID_TYPE_MATIERE`,type_matieres.DESCRIPTION,type_matieres.CARACTERISTIQUE, `NUMERO_COLIS`, `LONGEUR`, `COULEUR`, `QUANTITE_COMMANDE`, `QUANTITE_RECUE`, stock_matieres_premieres.`ID_FOURNISSEUR`,fournisseur.NOM,fournisseur.LOCALITE, stock_matieres_premieres.`ID_USER`,admin_user.NOM,admin_user.PRENOM, `DATE_ENTREE`, `DATE_INSERT`,stock_matieres_premieres.ID_STATUT_MATIERE,statut_matieres.DESCRIPTION_STATUT_MATIERE FROM `stock_matieres_premieres` JOIN type_matieres ON type_matieres.ID_TYPE_MATIERE=stock_matieres_premieres.ID_TYPE_MATIERE JOIN fournisseur ON fournisseur.ID_FOURNISSEUR JOIN admin_user ON admin_user.ID_USER=stock_matieres_premieres.ID_USER JOIN statut_matieres ON statut_matieres.ID_STATUT_MATIERE =stock_matieres_premieres.ID_STATUT_MATIERE WHERE 1" ;
+		$query_principal ="SELECT `ID_STOCK_MATIERE`, stock_matieres_premieres.`ID_TYPE_MATIERE`,type_matieres.DESCRIPTION,type_matieres.DESCRIPTION, `LONGEUR`, `COULEUR`, `QUANTITE_COMMANDE`, `QUANTITE_RECUE`, stock_matieres_premieres.`ID_FOURNISSEUR`,fournisseur.NOM,fournisseur.LOCALITE, stock_matieres_premieres.`ID_USER`,admin_user.NOM,admin_user.PRENOM, `DATE_ENTREE`, `DATE_INSERT`,stock_matieres_premieres.ID_STATUT_MATIERE,statut_matieres.DESCRIPTION_STATUT_MATIERE FROM `stock_matieres_premieres` JOIN type_matieres ON type_matieres.ID_TYPE_MATIERE=stock_matieres_premieres.ID_TYPE_MATIERE JOIN fournisseur ON fournisseur.ID_FOURNISSEUR JOIN admin_user ON admin_user.ID_USER=stock_matieres_premieres.ID_USER JOIN statut_matieres ON statut_matieres.ID_STATUT_MATIERE =stock_matieres_premieres.ID_STATUT_MATIERE WHERE 1 AND stock_matieres_premieres.LOT_MP IS NULL" ;
 
 		$var_search = !empty($_POST['search']['value']) ? $this->db->escape_like_str($_POST['search']['value']) : null;
 
@@ -41,12 +41,12 @@ class Stock_Matieres_New extends MY_Controller {
 
 		$order_by = '';
 
-		$order_column = array('ID_STOCK_MATIERE','type_matieres.DESCRIPTION', 'NUMERO_COLIS','LONGEUR','COULEUR','QUANTITE_COMMANDE','QUANTITE_RECUE','fournisseur.NOM','admin_user.NOM','DATE_ENTREE');
+		$order_column = array('ID_STOCK_MATIERE','type_matieres.DESCRIPTION','LONGEUR','COULEUR','QUANTITE_COMMANDE','QUANTITE_RECUE','fournisseur.NOM','admin_user.NOM','DATE_ENTREE');
 
 		$order_by = isset($_POST['order']) ? ' ORDER BY ' . $order_column[$_POST['order']['0']['column']] . '  ' . $_POST['order']['0']['dir'] : ' ORDER BY ID_FOURNISSEUR ASC';
 
 		$search = !empty($_POST['search']['value']) ?
-		"AND type_matieres.DESCRIPTION LIKE '%$var_search%' OR NUMERO_COLIS LIKE '%$var_search%' OR LONGEUR LIKE '%$var_search%' OR fournisseur.NOM LIKE '%$var_search%' OR admin_user.NOM LIKE '%$var_search%' OR DATE_FORMAT(DATE_ENTREE, '%d/%m/%Y') LIKE '%$var_search%'  "
+		"AND type_matieres.DESCRIPTION LIKE '%$var_search%' OR LONGEUR LIKE '%$var_search%' OR fournisseur.NOM LIKE '%$var_search%' OR admin_user.NOM LIKE '%$var_search%' OR DATE_FORMAT(DATE_ENTREE, '%d/%m/%Y') LIKE '%$var_search%'  "
 		: '';
 
 		$critaire = '';
@@ -60,7 +60,7 @@ class Stock_Matieres_New extends MY_Controller {
 		foreach ($resultat as $key) {
 			$row = array();
 
-			$row[] = $key->DESCRIPTION.'('.$key->CARACTERISTIQUE.')';
+			$row[] = $key->DESCRIPTION.'('.$key->DESCRIPTION.')';
 			// $row[] = $key->NUMERO_COLIS ? $key->NUMERO_COLIS.'('.$key->COULEUR.')' : "N/A" ;
 			// $row[] = $key->LONGEUR ? $key->LONGEUR : "-";
 			// $row[] = $key->QUANTITE_COMMANDE;
@@ -82,7 +82,7 @@ class Stock_Matieres_New extends MY_Controller {
 			<form id="FormData" action="'.base_url("stock_matieres/Stock_matieres/effacer/".$key->ID_STOCK_MATIERE).'" >
 			<div class="modal-body">
 
-			voulez vous supprimer le fournisseur '.$key->DESCRIPTION.'('.$key->CARACTERISTIQUE.')
+			voulez vous supprimer le fournisseur '.$key->DESCRIPTION.'
 			</div>
 			<div class="modal-footer">
 			<button type="submit" class="btn btn-secondary" >Supprimer</button>
@@ -127,6 +127,111 @@ class Stock_Matieres_New extends MY_Controller {
 		echo json_encode($output);
 		exit;
 	}
+
+
+
+	public function listing2()
+	{
+
+		$query_principal ="SELECT `ID_STOCK_MATIERE`, stock_matieres_premieres.`ID_TYPE_MATIERE`,type_matieres.DESCRIPTION,type_matieres.DESCRIPTION, `LONGEUR`, `COULEUR`, `QUANTITE_COMMANDE`, `QUANTITE_RECUE`, stock_matieres_premieres.`ID_FOURNISSEUR`,fournisseur.NOM,fournisseur.LOCALITE, stock_matieres_premieres.`ID_USER`,admin_user.NOM,admin_user.PRENOM, `DATE_ENTREE`, `DATE_INSERT`,stock_matieres_premieres.ID_STATUT_MATIERE,statut_matieres.DESCRIPTION_STATUT_MATIERE,stock_matieres_premieres.LOT_MP FROM `stock_matieres_premieres` JOIN type_matieres ON type_matieres.ID_TYPE_MATIERE=stock_matieres_premieres.ID_TYPE_MATIERE JOIN fournisseur ON fournisseur.ID_FOURNISSEUR JOIN admin_user ON admin_user.ID_USER=stock_matieres_premieres.ID_USER JOIN statut_matieres ON statut_matieres.ID_STATUT_MATIERE =stock_matieres_premieres.ID_STATUT_MATIERE WHERE 1 AND stock_matieres_premieres.LOT_MP IS NOT NULL" ;
+
+		$var_search = !empty($_POST['search']['value']) ? $this->db->escape_like_str($_POST['search']['value']) : null;
+
+		$limit = 'LIMIT 0,10';
+
+		if (isset($_POST['length']) && $_POST['length'] != -1) {
+			$limit = 'LIMIT ' . (isset($_POST["start"]) ? $_POST["start"] : 0) . ',' . $_POST["length"];
+		}
+
+		$order_by = '';
+
+		$order_column = array('LOT_MP','ID_STOCK_MATIERE','type_matieres.DESCRIPTION','LONGEUR','COULEUR','QUANTITE_COMMANDE','QUANTITE_RECUE','fournisseur.NOM','admin_user.NOM','DATE_ENTREE');
+
+		$order_by = isset($_POST['order']) ? ' ORDER BY ' . $order_column[$_POST['order']['0']['column']] . '  ' . $_POST['order']['0']['dir'] : ' ORDER BY ID_FOURNISSEUR ASC';
+
+		$search = !empty($_POST['search']['value']) ?
+		"AND type_matieres.DESCRIPTION LIKE '%$var_search%' OR LOT_MP LIKE '%$var_search%' OR LONGEUR LIKE '%$var_search%' OR fournisseur.NOM LIKE '%$var_search%' OR admin_user.NOM LIKE '%$var_search%' OR DATE_FORMAT(DATE_ENTREE, '%d/%m/%Y') LIKE '%$var_search%'  "
+		: '';
+
+		$critaire = '';
+
+		$query_secondaire = $query_principal . ' ' . $critaire . ' ' . $search . ' ' . $order_by . '   ' . $limit;
+		$query_filter = $query_principal . ' ' . $critaire . ' ' . $search;
+
+		$resultat = $this->Model->datatable($query_secondaire);
+
+		$data = array();
+		foreach ($resultat as $key) {
+			$row = array();
+            $row[] ='<span class="badge badge-success">'.$key->LOT_MP.'</span>';
+			$row[] = $key->DESCRIPTION.'('.$key->DESCRIPTION.')';
+			// $row[] = $key->NUMERO_COLIS ? $key->NUMERO_COLIS.'('.$key->COULEUR.')' : "N/A" ;
+			// $row[] = $key->LONGEUR ? $key->LONGEUR : "-";
+			// $row[] = $key->QUANTITE_COMMANDE;
+			$row[] = $key->QUANTITE_RECUE;
+			$row[] = $key->NOM .' de '.$key->LOCALITE ;
+			$row[] = $key->NOM .' '.$key->PRENOM;
+			$row[] = date("d/m/Y", strtotime($key->DATE_ENTREE));
+			$row[] = $key->DESCRIPTION_STATUT_MATIERE;
+			$options = '
+			<div class="modal fade" id="rendreeff'.$key->ID_STOCK_MATIERE.'" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+			<div class="modal-dialog">
+			<div class="modal-content">
+			<div class="modal-header">
+			<h4 class="modal-title" id="myModalLabel">Effacer</h4>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+			</div>
+			<form id="FormData" action="'.base_url("stock_matieres/Stock_matieres/effacer/".$key->ID_STOCK_MATIERE).'" >
+			<div class="modal-body">
+
+			voulez vous supprimer le fournisseur '.$key->DESCRIPTION.'
+			</div>
+			<div class="modal-footer">
+			<button type="submit" class="btn btn-secondary" >Supprimer</button>
+			</div>
+			</div>
+			</div>
+			</div>
+
+			<div class="btn-group">
+			<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+			<i class="fa fa-cogs"></i> Actions <i class="fa fa-angle-down"></i>
+			</button>
+			<div class="dropdown-menu">';
+			if($key->ID_STATUT_MATIERE ==1){
+				$options .='<a class="dropdown-item" href="'.base_url("stock_matieres/Stock_Matieres_New/index_update/".$key->ID_STOCK_MATIERE).'/0">
+				<i class="fa fa-edit"></i> Modifier
+				</a>
+				<a class="dropdown-item" data-toggle="modal" data-target="#rendreeff'.$key->ID_STOCK_MATIERE.'">
+				<i class="fa fa-trash"></i> Supprimer
+				</a>
+				';
+			}
+			$options .='
+			<a class="dropdown-item" onclick="get_histo('.$key->ID_STOCK_MATIERE.')">
+			<i class="fa fa-eye"></i> Details
+			</a>
+			</div>
+			</div>';
+
+			$row[]=$options ;
+			
+			$data[] = $row;
+		}
+
+		$output = array(
+			"draw" => intval($_POST['draw']),
+			"recordsTotal" => $this->Model->all_data($query_principal),
+			"recordsFiltered" => $this->Model->filtrer($query_filter),
+			"data" => $data
+		);
+
+		echo json_encode($output);
+		exit;
+	}
+
 
 
 

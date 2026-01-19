@@ -42,7 +42,23 @@
              echo $this->session->flashdata('message');
 
            ?>
-           <div class="table-responsive">
+
+
+            <ul class="nav nav-tabs">
+                      <li class="nav-item">
+                        <a class="nav-link active" href="#tab-1-1" data-toggle="tab"><i class="fa fa-line-chart"></i> Matières premières locales</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#tab-1-2" data-toggle="tab" onclick="liste_search2()"><i class="fa fa-heartbeat"></i> Matières premières internatiionales</a>
+                    </li>
+
+                </ul>
+
+   <div class="tab-content">
+      <div class="tab-pane fade show active" id="tab-1-1"> 
+             
+
+             <div class="table-responsive">
              <table class="table table-responsive table-striped table-bordered table-hover table-modern" id="mytable" cellspacing="0" width="100%">
               <thead>
                 <tr>
@@ -60,6 +76,31 @@
               </tbody>
             </table>
           </div>
+        </div>
+         <div class="tab-pane" id="tab-1-2">
+           <div class="table-responsive">
+             <table class="table table-responsive table-striped table-bordered table-hover table-modern" id="mytable2" cellspacing="0" width="100%">
+              <thead>
+                <tr>
+                  <th>Lot</th>
+                  <th>Type matiere</th>
+                  <th>Qté reçue</th>
+                  <th>Fournisseur</th>
+                  <th>Utilisateur</th>
+                  <th>Date d'entrée</th>
+                  <th>Statut</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Les données seront chargées dynamiquement par DataTables -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+     
+
         </div>
       </div>
     </div>
@@ -137,6 +178,38 @@
     var url = "<?= base_url() ?>stock_matieres/Stock_Matieres_New/listing";
     var row_count = "1000000";
     table = $("#mytable").DataTable({
+      "processing": true,
+      "destroy": true,
+      "serverSide": true,
+      "order": [[0, 'desc']],
+      "ajax": { url: url, type: "POST" },
+      lengthMenu: [[5, 10, 50, 100, row_count], [5, 10, 50, 100, "All"]],
+      pageLength: 10,
+      "columnDefs": [{ "targets": [], "orderable": false }],
+      dom: 'Bfrtlip',
+      buttons: ['copy', 'excel', 'pdf'],
+      language: {
+        "sProcessing": "Traitement en cours...",
+        "sSearch": "Rechercher&nbsp;:",
+        "sLengthMenu": "Afficher _MENU_ éléments",
+        "sInfo": "Affichage de _START_ à _END_ sur _TOTAL_ éléments",
+        "sInfoEmpty": "Aucun élément",
+        "sZeroRecords": "Aucun résultat",
+        "sEmptyTable": "Aucune donnée disponible",
+        "oPaginate": {
+          "sFirst": "Premier",
+          "sPrevious": "Précédent",
+          "sNext": "Suivant",
+          "sLast": "Dernier"
+        }
+      }
+    });
+  }
+
+  function liste_search2() {
+    var url = "<?= base_url() ?>stock_matieres/Stock_Matieres_New/listing2";
+    var row_count = "1000000";
+    table = $("#mytable2").DataTable({
       "processing": true,
       "destroy": true,
       "serverSide": true,
