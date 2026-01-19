@@ -44,7 +44,7 @@
                   <select class="form-control select2_demo_1" id="ID_TYPE_MATIERE" name="ID_TYPE_MATIERE">
                     <option value="">--select--</option>
                     <?php foreach($type_matieres as $type){?>
-                      <option value="<?= $type['ID_TYPE_MATIERE']?>" <?= set_value('ID_TYPE_MATIERE') == $type['ID_TYPE_MATIERE'] ? 'selected' : '' ?>><?= $type['DESCRIPTION'].'('.$type['CARACTERISTIQUE'].')' ?></option> 
+                      <option value="<?= $type['ID_TYPE_MATIERE']?>" <?= set_value('ID_TYPE_MATIERE') == $type['ID_TYPE_MATIERE'] ? 'selected' : '' ?>><?= $type['DESCRIPTION'].'('.$type['UNITE'].')' ?></option> 
                     <?php }?> 
                   </select>
                   <font color='red' id="errorID_TYPE_MATIERE"></font>

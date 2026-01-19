@@ -29,9 +29,9 @@
 
                      </ul>
                  </li>
-                 <li>
+                     <li>
                     <a href="javascript:;"><i class="sidebar-item-icon fa fa-bookmark"></i>
-                        <span class="nav-label">Logistique</span><i class="fa fa-angle-left arrow"></i></a>
+                        <span class="nav-label">Saisie & donnees</span><i class="fa fa-angle-left arrow"></i></a>
                         <ul class="nav-2-level collapse">
                             <li>
                                 <a href="<?= base_url()?>stock_matieres/Fournisseur">Fournisseur</a>
@@ -39,6 +39,13 @@
                             <li>
                                 <a href="<?= base_url()?>stock_matieres/Type_matieres">Type Matieres</a>
                             </li>
+                            
+                        </ul>
+                    </li>
+                 <li>
+                    <a href="javascript:;"><i class="sidebar-item-icon fa fa-bookmark"></i>
+                        <span class="nav-label">Logistique</span><i class="fa fa-angle-left arrow"></i></a>
+                        <ul class="nav-2-level collapse">
                             <li>
                                 <a href="<?= base_url()?>stock_matieres/Stock_Matieres_New">Stock matieres</a>
                             </li>

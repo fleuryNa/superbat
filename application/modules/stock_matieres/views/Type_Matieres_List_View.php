@@ -36,12 +36,31 @@
           ?>
           <div class="ibox-body">
 
+            
+            <div id="alertBox">
+              <?php if ($this->session->flashdata('success')): ?>
+                <div class="alert alert-success alert-dismissible fade show text-center">
+                  <i class="fa fa-check-circle"></i>
+                  <?= $this->session->flashdata('success'); ?>
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>
+              <?php endif; ?>
+
+              <?php if ($this->session->flashdata('error')): ?>
+                <div class="alert alert-danger alert-dismissible fade show text-center">
+                  <i class="fa fa-exclamation-triangle"></i>
+                  <?= $this->session->flashdata('error'); ?>
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>
+              <?php endif; ?>
+            </div>
+
             <table class="table table-striped table-bordered table-hover table-modern" id="mytable" cellspacing="0" width="100%">
               <thead>
                 <tr>
                   <th>Description</th>
-                  <th>caracteristique</th>
-                  <!-- <th>Statut</th> -->
+                  <th>Unite de mesure</th>
+                  <th>Abbreviation</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -105,6 +124,13 @@
     });
   }
 </script>
+<script>
+  $(document).ready(function () {
+    setTimeout(function () {
+      $('.alert').fadeOut('slow');
+    }, 4000);
+  });
 
+</script>
 </body>
 </html>
