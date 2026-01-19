@@ -25,7 +25,7 @@
           </li>
           <li class="breadcrumb-item"><?= $title; ?></li>
         </ol>
-      </div>
+      </div> 
 
       <!-- PAGE CONTENT -->
       <div class="page-content fade-in-up">
@@ -130,6 +130,29 @@
               <div class="tab-pane" id="tab-1-2">
                <form id="FormData" action="<?php echo base_url()?>stock_matieres/Stock_Matieres_New/upload_excel" method="POST" enctype="multipart/form-data">
                 <div class="row">
+
+                                <div class="col-sm-6 form-group" data-toggle="buttons">
+                               
+
+                                    <label class="form-control-label">Provient d'un autre Lot incomplet ? </label>
+                        <select class="form-control" id="is_complet" name="is_complet" onchange="affiche_lot()">
+
+                        <option value="1" selected>Non</option>
+                        <option value="2">Oui</option>
+                      </select>
+
+                    </div>
+                    <div class="col-sm-6 form-group" id="lot_div" style="display: none;">
+                        <label class="form-control-label">Lots </label>
+                        <select class="form-control select2_demo_1" id="LOT_N" name="LOT_N">
+                          <option value="">--select--</option>
+                          <?php foreach($lots as $type){?>
+
+                            <option value="<?= $type['ID_STOCK_MATIERE']?>" <?= set_value('ID_STOCK_MATIERE') == $type['ID_STOCK_MATIERE'] ? 'selected' : '' ?>><?= $type['LOT_MP'].'' ?></option> 
+                          <?php }?> 
+                        </select>
+
+                      </div>
                   <div class="col-sm-6 form-group">
                     <label>PACKING LIST</label>
                     <input class="form-control" type="file" id="fichier_excel" name="fichier_excel" placeholder="" value="<?=set_value('fichier_excel')?>">
@@ -140,7 +163,20 @@
                     <input class="form-control" type="date" id="DATE_ENTREE_EXCEL" name="DATE_ENTREE_EXCEL" value="<?=set_value('DATE_ENTREE_EXCEL')?>">
                     <?php echo form_error('DATE_ENTREE_EXCEL', '<div class="text-danger">', '</div>'); ?>
                   </div>
-                </div>
+             
+
+                <div class="col-sm-6 form-group" data-toggle="buttons">
+                               
+
+               <label class="form-control-label">Après l'enregistrement, le Lot sera complet ? </label>
+                        <select class="form-control" id="verify_complet" name="verify_complet">
+
+                        <option value="1" selected>Oui</option>
+                        <option value="2">Non</option>
+                      </select>
+
+                    </div>
+                       </div>
 
                 <div class="form-group col-sm-12">
                   <button class="btn btn-success btn-block" type="submit">Submit</button>
@@ -202,6 +238,23 @@
     $('.alert').fadeOut('slow');
   }, 4000);
  });
+</script>
+
+<script>
+  function affiche_lot() {
+    // body...
+  
+  var id=$("#is_complet").val();
+
+  if (id==2) {
+
+  document.getElementById("lot_div").style.display="block";
+}else{
+
+  document.getElementById("lot_div").style.display="none";
+
+  }
+}
 </script>
 
 

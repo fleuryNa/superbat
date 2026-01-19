@@ -71,16 +71,16 @@
                   <select class="form-control select2_demo_1" id="ID_TYPE_MATIERE" name="ID_TYPE_MATIERE">
                     <option value="">--select--</option>
                     <?php foreach($type_matieres as $type){?>
-                    <option value="<?= $type['ID_TYPE_MATIERE']?>" <?= set_value('ID_TYPE_MATIERE',$data['ID_TYPE_MATIERE']) == $type['ID_TYPE_MATIERE'] ? 'selected' : '' ?>><?= $type['DESCRIPTION'].'('.$type['CARACTERISTIQUE'].')' ?></option> 
+                    <option value="<?= $type['ID_TYPE_MATIERE']?>" <?= set_value('ID_TYPE_MATIERE',$data['ID_TYPE_MATIERE']) == $type['ID_TYPE_MATIERE'] ? 'selected' : '' ?>><?= $type['DESCRIPTION'].'' ?></option> 
                     <?php }?> 
                   </select>
                   <?php echo form_error('ID_TYPE_MATIERE', '<div class="text-danger">', '</div>'); ?>
                 </div>
-               <div class="col-sm-6 form-group">
+             <!--   <div class="col-sm-6 form-group">
                   <label>Description</label>
                   <input class="form-control" type="text" class="form-control" id="DESCRIPTION" name="DESCRIPTION" placeholder="Description" value="<?=set_value('DESCRIPTION',$data['DESCRIPTION'])?>">
                   
-                </div>
+                </div> -->
               <!--    <div class="col-sm-6 form-group">
                   <label>Longueur</label>
                   <input class="form-control" type="text" id="LONGEUR" name="LONGEUR" placeholder="Longueur" value="<?=set_value('LONGEUR',$data['LONGEUR'])?>">

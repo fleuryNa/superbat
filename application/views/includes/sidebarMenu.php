@@ -58,7 +58,11 @@
                         <span class="nav-label">Matieres pemieres </span><i class="fa fa-angle-left arrow"></i></a>
                         <ul class="nav-2-level collapse">
                             <li>
-                                <a href="<?= base_url()?>stock_matieres/Stock_Matieres_New/liste_reception"> Reception</a>
+                                <a href="<?= base_url()?>stock_matieres/Stock_Matieres_New/liste_reception"> Reception matières Locales</a>
+                            </li>
+
+                             <li>
+                                <a href="<?= base_url()?>stock_matieres/Stock_Matieres_New/liste_reception2"> Reception matières internationales</a>
                             </li>
                             <li>
                                 <a href="<?= base_url()?>stock_matieres/Commande_production">Commande production</a>
